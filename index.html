@@ -283,7 +283,9 @@
       position: absolute; bottom: 0; left: 0; right: 0;
       padding: 1.2rem 1.4rem 1rem;
       display: flex; align-items: flex-end; justify-content: space-between;
+      transition: opacity 0.3s;
     }
+    .menu-card.open .card-label { opacity: 0; pointer-events: none; }
     .card-label h3 {
       font-family: 'Playfair Display', serif;
       font-size: 1.2rem; color: #fff;
@@ -302,7 +304,23 @@
       transition: transform 0.3s, background 0.3s;
       flex-shrink: 0;
     }
-    .menu-card.open .card-arrow { transform: rotate(180deg); background: var(--red); border-color: var(--red); }
+
+    .card-sticky-title {
+      display: none;
+      position: sticky; top: 64px; z-index: 10;
+      background: var(--red);
+      text-align: center;
+      padding: 12px 1rem;
+    }
+    .menu-card.open .card-sticky-title { display: block; }
+    .card-sticky-title h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.1rem;
+      color: var(--beige); letter-spacing: 2px;
+    }
+    .card-sticky-title .card-count {
+      font-size: 0.7rem; color: rgba(232,201,160,0.7); letter-spacing: 1px;
+    }
 
     /* DROPDOWN PANEL */
     .card-dropdown {
@@ -513,6 +531,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Café</h3><div class="card-count">8 boissons · dès 5.900</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Espresso</span><span class="dropdown-item-price">6.500</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">6.900</span></div>
@@ -538,6 +557,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Nespresso</h3><div class="card-count">5 boissons · dès 7.700</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Nespresso</span><span class="dropdown-item-price">7.700</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">7.900</span></div>
@@ -567,6 +587,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Café Spécials</h3><div class="card-count">8 créations · dès 9.000</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Affogato</span><span class="dropdown-item-price">11.000</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Bombon</span><span class="dropdown-item-price">9.000</span></div>
@@ -592,6 +613,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Frappuccino</h3><div class="card-count">6 saveurs · dès 12.000</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Nature</span><span class="dropdown-item-price">12.000</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Vanille</span><span class="dropdown-item-price">15.500</span></div>
@@ -615,6 +637,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Jus</h3><div class="card-count">5 fruits · dès 8.500</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Orange</span><span class="dropdown-item-price">8.500</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Citronade</span><span class="dropdown-item-price">8.500</span></div>
@@ -637,6 +660,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Thé</h3><div class="card-count">4 infusions · dès 6.400</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Infusion</span><span class="dropdown-item-price">6.600</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Thé à la menthe</span><span class="dropdown-item-price">6.400</span></div>
@@ -658,6 +682,7 @@
           <div class="card-arrow">&#8964;</div>
         </div>
         <div class="card-dropdown">
+          <div class="card-sticky-title"><h3>Eau & Soda</h3><div class="card-count">5 boissons · dès 2.900</div></div>
           <div class="dropdown-inner">
             <div class="dropdown-item"><span class="dropdown-item-name">Eau 0.5L</span><span class="dropdown-item-price">2.900</span></div>
             <div class="dropdown-item"><span class="dropdown-item-name">Eau 1L</span><span class="dropdown-item-price">4.500</span></div>
