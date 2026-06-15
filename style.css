@@ -303,18 +303,19 @@ nav {
 .card-sticky-title {
   display: none;
   position: sticky; top: 72px; z-index: 10;
-  background: var(--red);
+  background: #fff;
   text-align: center;
   padding: 14px 1.5rem;
+  border-bottom: 0.5px solid var(--beige-mid);
 }
 .menu-card.open .card-sticky-title { display: block; }
 .card-sticky-title h3 {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-size: 1.1rem;
-  color: var(--beige); letter-spacing: 2px;
+  color: var(--red); letter-spacing: 2px;
 }
 .card-sticky-title .card-count {
-  font-size: 0.7rem; color: rgba(232,201,160,0.7); letter-spacing: 1px;
+  font-size: 0.7rem; color: var(--brown-light); letter-spacing: 1px;
 }
 
 /* DROPDOWN PANEL */
