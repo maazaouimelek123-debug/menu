@@ -237,7 +237,7 @@
 
     /* MENU SECTION */
     #menu {
-      padding: 6rem 2rem;
+      padding: 6rem 2rem 4rem;
       background: var(--cream);
     }
     .section-header { text-align: center; margin-bottom: 3rem; }
@@ -245,42 +245,104 @@
     .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--red); }
     .section-header p { font-size: 0.88rem; color: var(--brown-light); margin-top: 0.5rem; }
 
-    .menu-tabs {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 2.5rem;
+    /* PHOTO GRID */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+      max-width: 1100px;
+      margin: 0 auto;
     }
-    .menu-tab {
-      background: transparent;
-      border: 1px solid var(--beige-mid);
-      color: var(--brown-light);
-      padding: 8px 22px; border-radius: 25px;
-      cursor: pointer; font-size: 0.8rem; letter-spacing: 0.5px;
-      transition: all 0.2s; font-family: 'Inter', sans-serif;
+    .menu-card {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(58,32,16,0.12);
+      transition: transform 0.25s, box-shadow 0.25s;
     }
-    .menu-tab:hover { border-color: var(--red); color: var(--red); }
-    .menu-tab.active { background: var(--red); color: var(--beige); border-color: var(--red); }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(58,32,16,0.22); }
+    .menu-card.open { transform: none; box-shadow: 0 4px 20px rgba(58,32,16,0.18); }
 
-    .menu-panel { display: none; max-width: 680px; margin: 0 auto; }
-    .menu-panel.active { display: block; }
+    .card-photo {
+      width: 100%; height: 240px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+    .menu-card:hover .card-photo { transform: scale(1.04); }
+
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(90,15,15,0.82) 0%, rgba(90,15,15,0.15) 55%, transparent 100%);
+      pointer-events: none;
+    }
+    .card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.2rem 1.4rem 1rem;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .card-label h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: #fff;
+      font-style: italic; letter-spacing: 1px;
+    }
+    .card-label .card-count {
+      font-size: 0.72rem; color: rgba(255,255,255,0.65); letter-spacing: 1px;
+      display: block; margin-top: 2px;
+    }
+    .card-arrow {
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.9rem;
+      transition: transform 0.3s, background 0.3s;
+      flex-shrink: 0;
+    }
+    .menu-card.open .card-arrow { transform: rotate(180deg); background: var(--red); border-color: var(--red); }
+
+    /* DROPDOWN PANEL */
+    .card-dropdown {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+      background: #fff;
+    }
+    .menu-card.open .card-dropdown { max-height: 800px; }
+    .dropdown-inner { padding: 1rem 1.4rem 1.4rem; }
+
+    .dropdown-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0;
+      border-bottom: 0.5px solid var(--beige-dark);
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item-name { font-size: 0.88rem; color: var(--brown); }
+    .dropdown-item-price { font-size: 0.9rem; color: var(--red); font-weight: 500; }
+    .dropdown-sub {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--gold); margin: 10px 0 4px;
+    }
+    .dropdown-addon {
+      display: flex; justify-content: space-between;
+      padding: 6px 10px;
+      background: var(--beige);
+      border-radius: 6px;
+      margin-bottom: 3px;
+    }
+    .dropdown-addon span { font-size: 0.82rem; color: var(--brown-light); }
 
     .menu-category-title {
       font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--red);
-      letter-spacing: 2px;
-      text-align: center;
-      margin-bottom: 1rem;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--beige-mid);
+      font-style: italic; font-size: 1.05rem; color: var(--red);
+      letter-spacing: 2px; text-align: center; margin-bottom: 1rem;
+      padding-bottom: 8px; border-bottom: 1px solid var(--beige-mid);
     }
     .menu-items { display: flex; flex-direction: column; gap: 4px; margin-bottom: 1.5rem; }
     .menu-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 16px;
-      background: #fff;
-      border-radius: 8px;
-      border: 0.5px solid var(--beige-mid);
-      transition: 0.15s;
+      padding: 12px 16px; background: #fff;
+      border-radius: 8px; border: 0.5px solid var(--beige-mid); transition: 0.15s;
     }
     .menu-item:hover { background: var(--beige); border-color: var(--gold); }
     .menu-item-name { font-size: 0.9rem; color: var(--brown); font-weight: 400; }
@@ -288,11 +350,8 @@
     .addon-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin: 1rem 0 6px; }
     .addon-row {
       display: flex; justify-content: space-between;
-      padding: 8px 16px;
-      background: var(--beige);
-      border-radius: 6px;
-      border: 0.5px dashed var(--gold);
-      margin-bottom: 4px;
+      padding: 8px 16px; background: var(--beige);
+      border-radius: 6px; border: 0.5px dashed var(--gold); margin-bottom: 4px;
     }
     .addon-row span { font-size: 0.85rem; color: var(--brown-light); }
 
@@ -438,106 +497,175 @@
       <p>Des prix en dinars tunisiens</p>
     </div>
 
-    <div class="menu-tabs">
-      <button class="menu-tab active" onclick="showMenu('cafe',this)">Café</button>
-      <button class="menu-tab" onclick="showMenu('special',this)">Café Spécials</button>
-      <button class="menu-tab" onclick="showMenu('frappuccino',this)">Frappuccino</button>
-      <button class="menu-tab" onclick="showMenu('jus',this)">Jus</button>
-      <button class="menu-tab" onclick="showMenu('the',this)">Thé</button>
-      <button class="menu-tab" onclick="showMenu('eau',this)">Eau & Soda</button>
-    </div>
+    <div class="menu-grid">
 
-    <!-- CAFÉ -->
-    <div class="menu-panel active" id="panel-cafe">
-      <div class="menu-category-title">CAFÉ</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Espresso</span><span class="menu-item-price">6.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Macchiato</span><span class="menu-item-price">6.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Café crème</span><span class="menu-item-price">7.800</span></div>
-        <div class="menu-item"><span class="menu-item-name">Cappuccino</span><span class="menu-item-price">8.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Américain</span><span class="menu-item-price">6.600</span></div>
-        <div class="menu-item"><span class="menu-item-name">Chocolat au lait</span><span class="menu-item-price">5.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Café Nescafé</span><span class="menu-item-price">5.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Café Turque</span><span class="menu-item-price">9.000</span></div>
+      <!-- CAFÉ -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="Café" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Café</h3>
+            <span class="card-count">8 boissons · dès 5.900</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Espresso</span><span class="dropdown-item-price">6.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">6.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Café crème</span><span class="dropdown-item-price">7.800</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Cappuccino</span><span class="dropdown-item-price">8.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Américain</span><span class="dropdown-item-price">6.600</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Chocolat au lait</span><span class="dropdown-item-price">5.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Café Nescafé</span><span class="dropdown-item-price">5.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Café Turque</span><span class="dropdown-item-price">9.000</span></div>
+          </div>
+        </div>
       </div>
-      <div class="menu-category-title" style="margin-top:1.5rem;">CAFÉ NESPRESSO</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Nespresso</span><span class="menu-item-price">7.700</span></div>
-        <div class="menu-item"><span class="menu-item-name">Macchiato</span><span class="menu-item-price">7.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Café crème</span><span class="menu-item-price">8.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Cappuccino</span><span class="menu-item-price">9.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Américan</span><span class="menu-item-price">7.900</span></div>
-      </div>
-      <div class="addon-title">Origine Nespresso</div>
-      <div class="addon-row"><span>India</span><span>+0.800</span></div>
-      <div class="addon-row"><span>Brazil</span><span>+0.800</span></div>
-      <div class="addon-title">Arôme Nespresso</div>
-      <div class="addon-row"><span>Vanille</span><span>+0.500</span></div>
-      <div class="addon-row"><span>Noisette</span><span>+0.800</span></div>
-      <div class="addon-row"><span>Caramel</span><span>+0.500</span></div>
-    </div>
 
-    <!-- SPÉCIALS -->
-    <div class="menu-panel" id="panel-special">
-      <div class="menu-category-title">CAFÉ SPÉCIALS</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Affogato</span><span class="menu-item-price">11.000</span></div>
-        <div class="menu-item"><span class="menu-item-name">Bombon</span><span class="menu-item-price">9.000</span></div>
-        <div class="menu-item"><span class="menu-item-name">Chocolat chaud</span><span class="menu-item-price">9.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Liégeois</span><span class="menu-item-price">10.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Iced Americano</span><span class="menu-item-price">9.000</span></div>
-        <div class="menu-item"><span class="menu-item-name">Iced Latte</span><span class="menu-item-price">9.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Affogato Nespresso</span><span class="menu-item-price">14.000</span></div>
-        <div class="menu-item"><span class="menu-item-name">Liégeois Nespresso</span><span class="menu-item-price">15.000</span></div>
+      <!-- NESPRESSO -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80" alt="Nespresso" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Nespresso</h3>
+            <span class="card-count">5 boissons · dès 7.700</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Nespresso</span><span class="dropdown-item-price">7.700</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">7.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Café crème</span><span class="dropdown-item-price">8.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Cappuccino</span><span class="dropdown-item-price">9.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Américan</span><span class="dropdown-item-price">7.900</span></div>
+            <div class="dropdown-sub">Origine (+)</div>
+            <div class="dropdown-addon"><span>India</span><span>+0.800</span></div>
+            <div class="dropdown-addon"><span>Brazil</span><span>+0.800</span></div>
+            <div class="dropdown-sub">Arôme (+)</div>
+            <div class="dropdown-addon"><span>Vanille</span><span>+0.500</span></div>
+            <div class="dropdown-addon"><span>Noisette</span><span>+0.800</span></div>
+            <div class="dropdown-addon"><span>Caramel</span><span>+0.500</span></div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- FRAPPUCCINO -->
-    <div class="menu-panel" id="panel-frappuccino">
-      <div class="menu-category-title">FRAPPUCCINO</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Nature</span><span class="menu-item-price">12.000</span></div>
-        <div class="menu-item"><span class="menu-item-name">Vanille</span><span class="menu-item-price">15.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Nutella</span><span class="menu-item-price">15.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Noisette</span><span class="menu-item-price">15.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Caramel</span><span class="menu-item-price">15.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Spéculoos</span><span class="menu-item-price">16.000</span></div>
+      <!-- CAFÉ SPÉCIALS -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80" alt="Café Spécials" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Café Spécials</h3>
+            <span class="card-count">8 créations · dès 9.000</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Affogato</span><span class="dropdown-item-price">11.000</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Bombon</span><span class="dropdown-item-price">9.000</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Chocolat chaud</span><span class="dropdown-item-price">9.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Liégeois</span><span class="dropdown-item-price">10.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Iced Americano</span><span class="dropdown-item-price">9.000</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Iced Latte</span><span class="dropdown-item-price">9.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Affogato Nespresso</span><span class="dropdown-item-price">14.000</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Liégeois Nespresso</span><span class="dropdown-item-price">15.000</span></div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- JUS -->
-    <div class="menu-panel" id="panel-jus">
-      <div class="menu-category-title">JUS</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Orange</span><span class="menu-item-price">8.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Citronade</span><span class="menu-item-price">8.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Fraise</span><span class="menu-item-price">9.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Citronade aux amandes</span><span class="menu-item-price">10.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Kiwi</span><span class="menu-item-price">10.000</span></div>
+      <!-- FRAPPUCCINO -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80" alt="Frappuccino" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Frappuccino</h3>
+            <span class="card-count">6 saveurs · dès 12.000</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Nature</span><span class="dropdown-item-price">12.000</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Vanille</span><span class="dropdown-item-price">15.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Nutella</span><span class="dropdown-item-price">15.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Noisette</span><span class="dropdown-item-price">15.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Caramel</span><span class="dropdown-item-price">15.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Spéculoos</span><span class="dropdown-item-price">16.000</span></div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- THÉ -->
-    <div class="menu-panel" id="panel-the">
-      <div class="menu-category-title">THÉ</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Infusion</span><span class="menu-item-price">6.600</span></div>
-        <div class="menu-item"><span class="menu-item-name">Thé à la menthe</span><span class="menu-item-price">6.400</span></div>
-        <div class="menu-item"><span class="menu-item-name">Thé aux amandes</span><span class="menu-item-price">9.300</span></div>
-        <div class="menu-item"><span class="menu-item-name">Thé aux pignons</span><span class="menu-item-price">10.500</span></div>
+      <!-- JUS -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&q=80" alt="Jus" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Jus</h3>
+            <span class="card-count">5 fruits · dès 8.500</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Orange</span><span class="dropdown-item-price">8.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Citronade</span><span class="dropdown-item-price">8.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Fraise</span><span class="dropdown-item-price">9.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Citronade aux amandes</span><span class="dropdown-item-price">10.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Kiwi</span><span class="dropdown-item-price">10.000</span></div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- EAU -->
-    <div class="menu-panel" id="panel-eau">
-      <div class="menu-category-title">EAU & SODA</div>
-      <div class="menu-items">
-        <div class="menu-item"><span class="menu-item-name">Eau 0.5L</span><span class="menu-item-price">2.900</span></div>
-        <div class="menu-item"><span class="menu-item-name">Eau 1L</span><span class="menu-item-price">4.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Eau Gazeuse 1L</span><span class="menu-item-price">5.600</span></div>
-        <div class="menu-item"><span class="menu-item-name">Soda</span><span class="menu-item-price">6.500</span></div>
-        <div class="menu-item"><span class="menu-item-name">Boisson énergétique</span><span class="menu-item-price">9.900</span></div>
+      <!-- THÉ -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Thé" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Thé</h3>
+            <span class="card-count">4 infusions · dès 6.400</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Infusion</span><span class="dropdown-item-price">6.600</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Thé à la menthe</span><span class="dropdown-item-price">6.400</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Thé aux amandes</span><span class="dropdown-item-price">9.300</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Thé aux pignons</span><span class="dropdown-item-price">10.500</span></div>
+          </div>
+        </div>
       </div>
+
+      <!-- EAU & SODA -->
+      <div class="menu-card" onclick="toggleCard(this)">
+        <img class="card-photo" src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=80" alt="Eau et Soda" loading="lazy" />
+        <div class="card-overlay"></div>
+        <div class="card-label">
+          <div>
+            <h3>Eau & Soda</h3>
+            <span class="card-count">5 boissons · dès 2.900</span>
+          </div>
+          <div class="card-arrow">&#8964;</div>
+        </div>
+        <div class="card-dropdown">
+          <div class="dropdown-inner">
+            <div class="dropdown-item"><span class="dropdown-item-name">Eau 0.5L</span><span class="dropdown-item-price">2.900</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Eau 1L</span><span class="dropdown-item-price">4.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Eau Gazeuse 1L</span><span class="dropdown-item-price">5.600</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Soda</span><span class="dropdown-item-price">6.500</span></div>
+            <div class="dropdown-item"><span class="dropdown-item-name">Boisson énergétique</span><span class="dropdown-item-price">9.900</span></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -596,11 +724,13 @@
   </footer>
 
   <script>
-    function showMenu(id, btn) {
-      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-      document.getElementById('panel-' + id).classList.add('active');
-      btn.classList.add('active');
+    function toggleCard(card) {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.menu-card.open').forEach(c => c.classList.remove('open'));
+      if (!isOpen) {
+        card.classList.add('open');
+        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
     }
 
     function toggleNav() {
