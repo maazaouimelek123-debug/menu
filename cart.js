@@ -51,6 +51,9 @@ function renderCart() {
   }
 
   document.getElementById('cart-total').textContent = total.toFixed(3) + ' DT';
+  const checkout = document.getElementById('cart-checkout');
+  if (cart.length > 0) checkout.classList.add('visible');
+  else checkout.classList.remove('visible');
 }
 
 function animateBubble() {
@@ -74,6 +77,13 @@ function animateBubble() {
 function toggleCart() {
   const panel = document.getElementById('cart-panel');
   panel.classList.toggle('open');
+}
+
+function checkout() {
+  alert('Commande passée ! Merci pour votre choix chez BISOU ☕');
+  cart.length = 0;
+  renderCart();
+  toggleCart();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

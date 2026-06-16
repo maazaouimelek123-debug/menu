@@ -528,6 +528,28 @@ footer p { font-size: 0.75rem; color: rgba(245,237,224,0.4); letter-spacing: 1px
 
 .dropdown-item.added { background: #fff0ee; border-color: var(--red); transition: background 0.1s; }
 
+.cart-checkout {
+  display: none;
+  padding: 0.8rem 1.4rem 1.4rem;
+}
+.cart-checkout.visible { display: block; }
+.cart-checkout button {
+  width: 100%;
+  background: var(--red);
+  color: var(--beige);
+  border: none;
+  border-radius: 50px;
+  padding: 14px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.cart-checkout button:hover { background: var(--red-dark); transform: scale(1.02); }
+.cart-checkout button:active { transform: scale(0.98); }
+
 .cart-notif {
   position: fixed; z-index: 9999;
   background: var(--red); color: #fff;
