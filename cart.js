@@ -147,25 +147,39 @@ function stopScan() {
   document.getElementById('qr-box').classList.remove('active');
 }
 
-function onScanSuccess(data) {
-  stopScan();
-  document.getElementById('qr-hint').textContent = data;
-  document.getElementById('qr-success').classList.add('show');
-
-  const order = {
+function buildOrder(verified) {
+  return {
     id: Date.now(),
     ref: 'CMD-' + Math.floor(1000 + Math.random() * 9000),
     time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
     date: new Date().toLocaleDateString('fr-FR'),
     items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
     total: cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(3),
-    status: 'en attente'
+    status: 'en attente',
+    verified
   };
-  db.from('orders').insert(order)
-    .then(({ error }) => {
-      if (error) console.error('Supabase insert error:', error.message);
-    });
+}
 
+function saveOrder(order) {
+  return db.from('orders').insert(order)
+    .then(({ error }) => { if (error) console.error('Supabase insert error:', error.message); });
+}
+
+function submitWithoutScan() {
+  const order = buildOrder(false);
+  saveOrder(order).then(() => {
+    cart.length = 0;
+    renderCart();
+    closeCheckout();
+  });
+}
+
+function onScanSuccess(data) {
+  stopScan();
+  document.getElementById('qr-hint').textContent = data;
+  document.getElementById('qr-success').classList.add('show');
+  const order = buildOrder(true);
+  saveOrder(order);
   setTimeout(() => {
     cart.length = 0;
     renderCart();

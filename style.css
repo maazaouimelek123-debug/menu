@@ -634,6 +634,18 @@ footer p { font-size: 0.75rem; color: rgba(245,237,224,0.4); letter-spacing: 1px
 .qr-start-btn:hover { background: var(--red-dark); transform: scale(1.03); }
 .qr-start-btn.hidden { display: none; }
 
+.skip-scan-btn {
+  background: none;
+  border: none;
+  color: var(--brown-light);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.skip-scan-btn:hover { color: var(--red); }
+
 .qr-success {
   display: none;
   background: #e8f5e9; color: #2e7d32;

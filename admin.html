@@ -131,6 +131,22 @@
     }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+    .verify-dot {
+      display: inline-block;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+    .verify-dot.verified   { background: #4caf50; box-shadow: 0 0 0 2px rgba(76,175,80,0.25); }
+    .verify-dot.unverified { background: #ffc107; box-shadow: 0 0 0 2px rgba(255,193,7,0.25); }
+
+    .verify-label { font-size: 0.7rem; }
+    .verify-label.verified   { color: #2e7d32; }
+    .verify-label.unverified { color: #e65100; }
+
+    .order-card.priority { border-left: 3px solid #4caf50; }
+
     @media (max-width: 600px) {
       .stats-bar { padding: 1rem; }
       .orders-container { padding: 0 1rem 2rem; }
@@ -198,7 +214,7 @@
   let allOrders = [];
 
   async function fetchOrders() {
-    const { data, error } = await db.from('orders').select('*').order('id', { ascending: false });
+    const { data, error } = await db.from('orders').select('*').order('verified', { ascending: false }).order('id', { ascending: false });
     if (!error) allOrders = data || [];
     renderOrders();
   }
@@ -254,12 +270,13 @@
     grid.innerHTML = filtered.map(o => {
       const statusClass = o.status.replace(/ /g, '-');
       const isDone = o.status === 'livre';
+      const isPriority = o.verified;
       return `
-        <div class="order-card${isDone ? ' done' : ''}">
+        <div class="order-card${isDone ? ' done' : ''}${isPriority ? ' priority' : ''}">
           <div class="order-card-header">
             <div>
-              <div class="order-ref">${o.ref}</div>
-              <div class="order-time">${o.date} · ${o.time}</div>
+              <div class="order-ref">${o.ref} <span class="verify-dot ${o.verified ? 'verified' : 'unverified'}" title="${o.verified ? 'Vérifié' : 'Non vérifié'}"></span></div>
+              <div class="order-time">${o.date} · ${o.time} · <span class="verify-label ${o.verified ? 'verified' : 'unverified'}">${o.verified ? 'Vérifié' : 'Non vérifié'}</span></div>
             </div>
             <button class="status-pill ${statusClass}" onclick="nextStatus(${o.id})" title="Cliquer pour avancer le statut">
               ${STATUS_LABELS[o.status]}
