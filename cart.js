@@ -80,10 +80,82 @@ function toggleCart() {
 }
 
 function checkout() {
-  alert('Commande passée ! Merci pour votre choix chez BISOU ☕');
-  cart.length = 0;
-  renderCart();
+  const summary = document.getElementById('checkout-summary');
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  summary.innerHTML = cart.map(item =>
+    `<div class="checkout-row">
+      <span class="checkout-row-name">${item.name} × ${item.qty}</span>
+      <span class="checkout-row-price">${(item.price * item.qty).toFixed(3)} DT</span>
+    </div>`
+  ).join('') +
+  `<div class="checkout-total-row">
+    <span>Total</span>
+    <span>${total.toFixed(3)} DT</span>
+  </div>`;
+
+  document.getElementById('qr-box').classList.remove('active');
+  document.getElementById('qr-start-btn').classList.remove('hidden');
+  document.getElementById('qr-success').classList.remove('show');
+  document.getElementById('checkout-panel').classList.add('open');
   toggleCart();
+}
+
+function closeCheckout() {
+  document.getElementById('checkout-panel').classList.remove('open');
+  stopScan();
+}
+
+let scanStream = null;
+let scanInterval = null;
+
+function startScan() {
+  const video = document.getElementById('qr-video');
+  const box = document.getElementById('qr-box');
+  const btn = document.getElementById('qr-start-btn');
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    .then(stream => {
+      scanStream = stream;
+      video.srcObject = stream;
+      box.classList.add('active');
+      btn.classList.add('hidden');
+
+      const canvas = document.getElementById('qr-canvas');
+      const ctx = canvas.getContext('2d');
+
+      scanInterval = setInterval(() => {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0);
+          const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = typeof jsQR !== 'undefined' ? jsQR(img.data, img.width, img.height) : null;
+          if (code) {
+            onScanSuccess(code.data);
+          }
+        }
+      }, 300);
+    })
+    .catch(() => {
+      onScanSuccess('BISOU-TABLE-01');
+    });
+}
+
+function stopScan() {
+  if (scanStream) { scanStream.getTracks().forEach(t => t.stop()); scanStream = null; }
+  clearInterval(scanInterval);
+  document.getElementById('qr-box').classList.remove('active');
+}
+
+function onScanSuccess(data) {
+  stopScan();
+  document.getElementById('qr-hint').textContent = data;
+  document.getElementById('qr-success').classList.add('show');
+  setTimeout(() => {
+    cart.length = 0;
+    renderCart();
+    closeCheckout();
+  }, 2500);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

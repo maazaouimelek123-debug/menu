@@ -480,6 +480,37 @@
     </div>
   </div>
 
+  <!-- CHECKOUT PANEL -->
+  <div id="checkout-panel">
+    <div class="checkout-inner">
+      <div class="checkout-header">
+        <h3>Votre commande</h3>
+        <button class="checkout-close" onclick="closeCheckout()">✕</button>
+      </div>
+      <div class="checkout-body">
+        <div class="checkout-summary" id="checkout-summary"></div>
+        <div class="checkout-divider"></div>
+        <div class="checkout-qr">
+          <p class="qr-label">Scannez pour confirmer</p>
+          <div class="qr-box" id="qr-box">
+            <video id="qr-video" playsinline autoplay muted></video>
+            <canvas id="qr-canvas" style="display:none"></canvas>
+            <div class="qr-frame">
+              <span class="qr-line"></span>
+            </div>
+            <p class="qr-hint" id="qr-hint">Positionnez un QR code dans le cadre</p>
+          </div>
+          <button class="qr-start-btn" id="qr-start-btn" onclick="startScan()">
+            <span>📷</span> Démarrer le scan
+          </button>
+          <div class="qr-success" id="qr-success">
+            <span>✓</span> Commande confirmée !
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">BISOU</div>
@@ -518,6 +549,7 @@
       }
     });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
   <script src="cart.js"></script>
 </body>
 </html>
