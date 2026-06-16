@@ -458,6 +458,25 @@
     </div>
   </section>
 
+  <!-- CART BUBBLE -->
+  <button id="cart-bubble" onclick="toggleCart()">
+    <span class="bubble-icon">🛒</span>
+    <span id="cart-count">0</span>
+  </button>
+
+  <!-- CART PANEL -->
+  <div id="cart-panel">
+    <div class="cart-header">
+      <h3>Panier</h3>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div id="cart-list"></div>
+    <div class="cart-footer">
+      <span class="cart-footer-label">Total</span>
+      <span id="cart-total">0.000 DT</span>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">BISOU</div>
@@ -496,5 +515,6 @@
       }
     });
   </script>
+  <script src="cart.js"></script>
 </body>
 </html>
