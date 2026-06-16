@@ -188,6 +188,8 @@
   <div class="orders-grid" id="orders-grid"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 <script>
   const STATUSES = ['en attente', 'en preparation', 'pret', 'livre'];
   const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Livré' };
@@ -196,12 +198,8 @@
   let allOrders = [];
 
   async function fetchOrders() {
-    try {
-      const res = await fetch('/api/orders');
-      allOrders = await res.json();
-    } catch {
-      allOrders = JSON.parse(localStorage.getItem('bisou_orders') || '[]');
-    }
+    const { data, error } = await db.from('orders').select('*').order('id', { ascending: false });
+    if (!error) allOrders = data || [];
     renderOrders();
   }
 
@@ -218,28 +216,20 @@
     const idx = STATUSES.indexOf(o.status);
     if (idx >= STATUSES.length - 1) return;
     const newStatus = STATUSES[idx + 1];
-    try {
-      await fetch(`/api/orders/${orderId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
-      });
-    } catch {
-      o.status = newStatus;
-      localStorage.setItem('bisou_orders', JSON.stringify(allOrders));
-    }
+    await db.from('orders').update({ status: newStatus }).eq('id', orderId);
     fetchOrders();
   }
 
   async function clearAll() {
     if (!confirm('Effacer toutes les commandes ?')) return;
-    try {
-      await fetch('/api/orders', { method: 'DELETE' });
-    } catch {
-      localStorage.removeItem('bisou_orders');
-    }
+    await db.from('orders').delete().neq('id', 0);
     fetchOrders();
   }
+
+  // Real-time subscription
+  db.channel('orders-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+    .subscribe();
 
   function renderOrders() {
     const orders = allOrders;
@@ -293,7 +283,6 @@
   }
 
   fetchOrders();
-  setInterval(fetchOrders, 3000);
 </script>
 </body>
 </html>

@@ -161,15 +161,10 @@ function onScanSuccess(data) {
     total: cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(3),
     status: 'en attente'
   };
-  fetch('/api/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order)
-  }).catch(() => {
-    const orders = JSON.parse(localStorage.getItem('bisou_orders') || '[]');
-    orders.unshift(order);
-    localStorage.setItem('bisou_orders', JSON.stringify(orders));
-  });
+  db.from('orders').insert(order)
+    .then(({ error }) => {
+      if (error) console.error('Supabase insert error:', error.message);
+    });
 
   setTimeout(() => {
     cart.length = 0;
