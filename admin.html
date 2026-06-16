@@ -193,39 +193,56 @@
   const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Livré' };
   let currentFilter = 'all';
 
-  function getOrders() {
-    return JSON.parse(localStorage.getItem('bisou_orders') || '[]');
-  }
-  function saveOrders(orders) {
-    localStorage.setItem('bisou_orders', JSON.stringify(orders));
+  let allOrders = [];
+
+  async function fetchOrders() {
+    try {
+      const res = await fetch('/api/orders');
+      allOrders = await res.json();
+    } catch {
+      allOrders = JSON.parse(localStorage.getItem('bisou_orders') || '[]');
+    }
+    renderOrders();
   }
 
   function setFilter(f, btn) {
     currentFilter = f;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    render();
+    renderOrders();
   }
 
-  function nextStatus(orderId) {
-    const orders = getOrders();
-    const o = orders.find(o => o.id === orderId);
+  async function nextStatus(orderId) {
+    const o = allOrders.find(o => o.id === orderId);
     if (!o) return;
     const idx = STATUSES.indexOf(o.status);
-    if (idx < STATUSES.length - 1) o.status = STATUSES[idx + 1];
-    saveOrders(orders);
-    render();
-  }
-
-  function clearAll() {
-    if (confirm('Effacer toutes les commandes ?')) {
-      localStorage.removeItem('bisou_orders');
-      render();
+    if (idx >= STATUSES.length - 1) return;
+    const newStatus = STATUSES[idx + 1];
+    try {
+      await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+    } catch {
+      o.status = newStatus;
+      localStorage.setItem('bisou_orders', JSON.stringify(allOrders));
     }
+    fetchOrders();
   }
 
-  function render() {
-    const orders = getOrders();
+  async function clearAll() {
+    if (!confirm('Effacer toutes les commandes ?')) return;
+    try {
+      await fetch('/api/orders', { method: 'DELETE' });
+    } catch {
+      localStorage.removeItem('bisou_orders');
+    }
+    fetchOrders();
+  }
+
+  function renderOrders() {
+    const orders = allOrders;
     const filtered = currentFilter === 'all' ? orders : orders.filter(o => o.status === currentFilter);
 
     const waiting = orders.filter(o => o.status === 'en attente').length;
@@ -245,7 +262,7 @@
     }
 
     grid.innerHTML = filtered.map(o => {
-      const statusClass = o.status.replace(' ', '-');
+      const statusClass = o.status.replace(/ /g, '-');
       const isDone = o.status === 'livre';
       return `
         <div class="order-card${isDone ? ' done' : ''}">
@@ -275,9 +292,8 @@
     }).join('');
   }
 
-  render();
-  window.addEventListener('storage', render);
-  setInterval(render, 3000);
+  fetchOrders();
+  setInterval(fetchOrders, 3000);
 </script>
 </body>
 </html>
