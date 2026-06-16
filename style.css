@@ -523,6 +523,20 @@ footer p { font-size: 0.75rem; color: rgba(245,237,224,0.4); letter-spacing: 1px
 
 .dropdown-item.added { background: #fff0ee; border-color: var(--red); transition: background 0.1s; }
 
+.cart-notif {
+  position: fixed; z-index: 9999;
+  background: var(--red); color: #fff;
+  font-size: 0.85rem; font-weight: 500;
+  padding: 4px 10px; border-radius: 20px;
+  pointer-events: none;
+  animation: notifRise 0.9s ease forwards;
+}
+@keyframes notifRise {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateY(-32px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-52px) scale(0.9); }
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .nav-links { display: none; }

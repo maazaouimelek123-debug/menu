@@ -58,6 +58,17 @@ function animateBubble() {
   bubble.classList.remove('bounce');
   void bubble.offsetWidth;
   bubble.classList.add('bounce');
+
+  const notif = document.createElement('div');
+  notif.className = 'cart-notif';
+  notif.textContent = '+1';
+  document.body.appendChild(notif);
+
+  const rect = bubble.getBoundingClientRect();
+  notif.style.left = (rect.left + rect.width / 2 - 18) + 'px';
+  notif.style.top = (rect.top - 10) + 'px';
+
+  setTimeout(() => notif.remove(), 900);
 }
 
 function toggleCart() {
