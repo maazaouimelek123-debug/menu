@@ -151,6 +151,20 @@ function onScanSuccess(data) {
   stopScan();
   document.getElementById('qr-hint').textContent = data;
   document.getElementById('qr-success').classList.add('show');
+
+  const order = {
+    id: Date.now(),
+    ref: 'CMD-' + Math.floor(1000 + Math.random() * 9000),
+    time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+    date: new Date().toLocaleDateString('fr-FR'),
+    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+    total: cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(3),
+    status: 'en attente'
+  };
+  const orders = JSON.parse(localStorage.getItem('bisou_orders') || '[]');
+  orders.unshift(order);
+  localStorage.setItem('bisou_orders', JSON.stringify(orders));
+
   setTimeout(() => {
     cart.length = 0;
     renderCart();

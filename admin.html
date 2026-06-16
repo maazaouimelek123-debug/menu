@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BISOU — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #8B1A1A; --red-dark: #6b1313;
+      --beige: #f5ede0; --beige-mid: #e2c9a8; --beige-dark: #e8d9c0;
+      --cream: #fdf8f2; --brown: #3a2010; --brown-light: #a05030; --gold: #c9956a;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); min-height: 100vh; }
+
+    /* TOP BAR */
+    header {
+      background: var(--red);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 10;
+      border-bottom: 1px solid rgba(201,149,106,0.3);
+    }
+    .admin-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--beige); letter-spacing: 4px; text-decoration: none; }
+    .admin-badge { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(232,201,160,0.7); }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    #order-count-badge {
+      background: var(--beige); color: var(--red);
+      font-size: 0.75rem; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .clear-btn {
+      background: rgba(245,237,224,0.12); border: 1px solid rgba(245,237,224,0.3);
+      color: var(--beige); font-size: 0.75rem; padding: 6px 14px;
+      border-radius: 20px; cursor: pointer; transition: 0.2s;
+    }
+    .clear-btn:hover { background: rgba(245,237,224,0.22); }
+
+    /* STATS */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem; padding: 1.5rem 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .stat-card {
+      background: #fff; border: 0.5px solid var(--beige-mid);
+      border-radius: 12px; padding: 1.2rem 1.4rem;
+    }
+    .stat-card .s-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 6px; }
+    .stat-card .s-value { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--red); }
+    .stat-card .s-sub { font-size: 0.75rem; color: var(--brown-light); margin-top: 2px; }
+
+    /* FILTERS */
+    .filters {
+      display: flex; gap: 8px; padding: 0 2rem 1.2rem;
+      max-width: 1100px; margin: 0 auto; flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: transparent; border: 1px solid var(--beige-mid);
+      color: var(--brown-light); padding: 6px 18px; border-radius: 20px;
+      cursor: pointer; font-size: 0.78rem; transition: 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: var(--red); color: var(--red); }
+    .filter-btn.active { background: var(--red); color: var(--beige); border-color: var(--red); }
+
+    /* ORDERS GRID */
+    .orders-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem 3rem; }
+    .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+    .order-card {
+      background: #fff; border: 0.5px solid var(--beige-mid);
+      border-radius: 14px; overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .order-card:hover { box-shadow: 0 4px 20px rgba(58,32,16,0.1); }
+    .order-card.done { opacity: 0.55; }
+
+    .order-card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.2rem 0.8rem;
+      border-bottom: 0.5px solid var(--beige-mid);
+    }
+    .order-ref { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--red); }
+    .order-time { font-size: 0.75rem; color: var(--brown-light); }
+
+    .status-pill {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.5px;
+      padding: 4px 12px; border-radius: 20px; border: none; cursor: pointer;
+      transition: 0.2s;
+    }
+    .status-pill.en-attente { background: #fff3e0; color: #e65100; }
+    .status-pill.en-preparation { background: #e3f2fd; color: #1565c0; }
+    .status-pill.pret { background: #e8f5e9; color: #2e7d32; }
+    .status-pill.livre { background: var(--beige-dark); color: var(--brown-light); }
+
+    .order-items { padding: 0.8rem 1.2rem; display: flex; flex-direction: column; gap: 4px; }
+    .order-item-row {
+      display: flex; justify-content: space-between;
+      padding: 7px 12px; background: var(--cream);
+      border-radius: 50px; font-size: 0.82rem;
+    }
+    .order-item-name { color: var(--brown); }
+    .order-item-qty { color: var(--gold); font-weight: 500; }
+
+    .order-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 1.2rem;
+      border-top: 0.5px solid var(--beige-mid);
+    }
+    .order-total-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); }
+    .order-total { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--red); }
+    .order-date { font-size: 0.72rem; color: var(--brown-light); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center; padding: 5rem 2rem;
+      grid-column: 1 / -1;
+    }
+    .empty-state .e-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .empty-state p { font-size: 0.9rem; color: var(--brown-light); }
+
+    /* LIVE INDICATOR */
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4caf50;
+      animation: pulse 2s infinite;
+      display: inline-block;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    @media (max-width: 600px) {
+      .stats-bar { padding: 1rem; }
+      .orders-container { padding: 0 1rem 2rem; }
+      .filters { padding: 0 1rem 1rem; }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <a href="index.html" class="admin-logo">BISOU</a>
+    <div class="admin-badge">Administration</div>
+  </div>
+  <div class="header-right">
+    <span class="live-dot"></span>
+    <span id="order-count-badge">0 commande</span>
+    <button class="clear-btn" onclick="clearAll()">Tout effacer</button>
+  </div>
+</header>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-card">
+    <div class="s-label">Total commandes</div>
+    <div class="s-value" id="stat-total">0</div>
+    <div class="s-sub">aujourd'hui</div>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">En attente</div>
+    <div class="s-value" id="stat-waiting">0</div>
+    <div class="s-sub">à préparer</div>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">Chiffre d'affaires</div>
+    <div class="s-value" id="stat-revenue">0</div>
+    <div class="s-sub">dinars</div>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">Livrées</div>
+    <div class="s-value" id="stat-done">0</div>
+    <div class="s-sub">complétées</div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
+  <button class="filter-btn" onclick="setFilter('en attente', this)">En attente</button>
+  <button class="filter-btn" onclick="setFilter('en preparation', this)">En préparation</button>
+  <button class="filter-btn" onclick="setFilter('pret', this)">Prêt</button>
+  <button class="filter-btn" onclick="setFilter('livre', this)">Livré</button>
+</div>
+
+<div class="orders-container">
+  <div class="orders-grid" id="orders-grid"></div>
+</div>
+
+<script>
+  const STATUSES = ['en attente', 'en preparation', 'pret', 'livre'];
+  const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Livré' };
+  let currentFilter = 'all';
+
+  function getOrders() {
+    return JSON.parse(localStorage.getItem('bisou_orders') || '[]');
+  }
+  function saveOrders(orders) {
+    localStorage.setItem('bisou_orders', JSON.stringify(orders));
+  }
+
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  function nextStatus(orderId) {
+    const orders = getOrders();
+    const o = orders.find(o => o.id === orderId);
+    if (!o) return;
+    const idx = STATUSES.indexOf(o.status);
+    if (idx < STATUSES.length - 1) o.status = STATUSES[idx + 1];
+    saveOrders(orders);
+    render();
+  }
+
+  function clearAll() {
+    if (confirm('Effacer toutes les commandes ?')) {
+      localStorage.removeItem('bisou_orders');
+      render();
+    }
+  }
+
+  function render() {
+    const orders = getOrders();
+    const filtered = currentFilter === 'all' ? orders : orders.filter(o => o.status === currentFilter);
+
+    const waiting = orders.filter(o => o.status === 'en attente').length;
+    const done = orders.filter(o => o.status === 'livre').length;
+    const revenue = orders.reduce((s, o) => s + parseFloat(o.total), 0);
+
+    document.getElementById('stat-total').textContent = orders.length;
+    document.getElementById('stat-waiting').textContent = waiting;
+    document.getElementById('stat-revenue').textContent = revenue.toFixed(3);
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('order-count-badge').textContent = orders.length + (orders.length === 1 ? ' commande' : ' commandes');
+
+    const grid = document.getElementById('orders-grid');
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><div class="e-icon">☕</div><p>Aucune commande${currentFilter !== 'all' ? ' dans cette catégorie' : ' pour le moment'}</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(o => {
+      const statusClass = o.status.replace(' ', '-');
+      const isDone = o.status === 'livre';
+      return `
+        <div class="order-card${isDone ? ' done' : ''}">
+          <div class="order-card-header">
+            <div>
+              <div class="order-ref">${o.ref}</div>
+              <div class="order-time">${o.date} · ${o.time}</div>
+            </div>
+            <button class="status-pill ${statusClass}" onclick="nextStatus(${o.id})" title="Cliquer pour avancer le statut">
+              ${STATUS_LABELS[o.status]}
+            </button>
+          </div>
+          <div class="order-items">
+            ${o.items.map(i => `
+              <div class="order-item-row">
+                <span class="order-item-name">${i.name}</span>
+                <span class="order-item-qty">× ${i.qty}</span>
+              </div>`).join('')}
+          </div>
+          <div class="order-card-footer">
+            <div>
+              <div class="order-total-label">Total</div>
+              <div class="order-total">${o.total} DT</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  render();
+  window.addEventListener('storage', render);
+  setInterval(render, 3000);
+</script>
+</body>
+</html>
