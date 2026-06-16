@@ -399,23 +399,28 @@ nav {
 /* CONTACT */
 #contact {
   background: var(--beige);
-  padding: 7rem 3rem;
+  padding: clamp(3rem, 8vw, 7rem) clamp(1.2rem, 5vw, 3rem);
   text-align: center;
 }
 #contact .label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
-#contact h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--red); margin-bottom: 3rem; }
-.contact-cards { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+#contact h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 5vw, 2.2rem); color: var(--red); margin-bottom: clamp(1.5rem, 4vw, 3rem); }
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.8rem, 2vw, 2rem);
+  max-width: 900px;
+  margin: 0 auto;
+}
 .contact-card {
   background: #fff;
   border: 0.5px solid var(--beige-mid);
   border-radius: 14px;
-  padding: 2.5rem 3rem;
-  min-width: 210px;
+  padding: clamp(1.2rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem);
   text-align: center;
 }
-.contact-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.contact-icon { font-size: clamp(1.4rem, 3vw, 1.8rem); margin-bottom: 0.8rem; }
 .contact-card h3 { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
-.contact-card p { font-size: 0.9rem; color: var(--brown); line-height: 1.7; }
+.contact-card p { font-size: clamp(0.8rem, 2vw, 0.9rem); color: var(--brown); line-height: 1.7; }
 
 /* FOOTER */
 footer {
@@ -531,6 +536,10 @@ footer p { font-size: 0.75rem; color: rgba(245,237,224,0.4); letter-spacing: 1px
   pointer-events: none;
   animation: notifRise 0.9s ease forwards;
 }
+@media (max-width: 480px) {
+  .contact-cards { grid-template-columns: 1fr; }
+}
+
 @keyframes notifRise {
   0%   { opacity: 1; transform: translateY(0) scale(1); }
   60%  { opacity: 1; transform: translateY(-32px) scale(1.1); }
