@@ -58,6 +58,8 @@
     .gate-btn:active { transform: scale(0.98); }
     .gate-err { font-size: 0.78rem; color: var(--red); min-height: 1.1rem; }
     .gate-lock { font-size: 1.8rem; margin-bottom: -4px; opacity: 0.15; }
+    .gate-field { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+    .gate-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); padding-left: 4px; }
 
     /* TOP BAR */
     header {
@@ -224,32 +226,24 @@
 
 <!-- ====== ADMIN GATE ====== -->
 <div id="admin-gate">
-  <!-- Première connexion : création du mot de passe -->
-  <div class="gate-card" id="gate-setup" style="display:none;">
-    <div class="gate-lock">🔐</div>
-    <div class="gate-logo">BISOU</div>
-    <div class="gate-title">Créer votre mot de passe</div>
-    <div class="gate-sub">Première connexion admin</div>
-    <input type="password" id="setup-pwd" class="gate-input"
-           placeholder="Mot de passe (min. 6 car.)"
-           onkeydown="if(event.key==='Enter')document.getElementById('setup-pwd2').focus()" />
-    <input type="password" id="setup-pwd2" class="gate-input"
-           placeholder="Confirmer le mot de passe"
-           onkeydown="if(event.key==='Enter')doSetup()" />
-    <button class="gate-btn" onclick="doSetup()">Créer le mot de passe</button>
-    <div class="gate-err" id="gate-err-setup"></div>
-  </div>
-
-  <!-- Connexion normale -->
-  <div class="gate-card" id="gate-login" style="display:none;">
+  <div class="gate-card" id="gate-login">
     <div class="gate-lock">🔒</div>
     <div class="gate-logo">BISOU</div>
     <div class="gate-title">Administration</div>
-    <div class="gate-sub">Accès restreint</div>
-    <input type="password" id="login-pwd" class="gate-input"
-           placeholder="Mot de passe"
-           onkeydown="if(event.key==='Enter')doLogin()" />
-    <button class="gate-btn" onclick="doLogin()">Entrer</button>
+    <div class="gate-sub">Accès staff</div>
+    <div class="gate-field">
+      <span class="gate-label">Code utilisateur</span>
+      <input type="text" id="login-user" class="gate-input" placeholder="ex : admin"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             onkeydown="if(event.key==='Enter')document.getElementById('login-pin').focus()" />
+    </div>
+    <div class="gate-field">
+      <span class="gate-label">Code PIN</span>
+      <input type="password" id="login-pin" class="gate-input" placeholder="••••••"
+             inputmode="numeric" maxlength="8"
+             onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <button class="gate-btn" onclick="doLogin()">Accéder</button>
     <div class="gate-err" id="gate-err-login"></div>
   </div>
 </div>
@@ -328,12 +322,12 @@
 <script src="supabase.js"></script>
 <script>
   // ---- Auth Gate ----
-  const _HK = 'bisou_adm_h', _SK = 'bisou_adm_s';
-
-  async function _sha256(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
+  // Pour ajouter/modifier des comptes : changer les paires "utilisateur": "PIN" ci-dessous
+  const STAFF_ACCOUNTS = {
+    'admin':  '1234',
+    'staff':  '5678',
+  };
+  const _SK = 'bisou_adm_s';
 
   function _showAdmin() {
     document.getElementById('admin-gate').style.display = 'none';
@@ -341,30 +335,19 @@
     _initAdmin();
   }
 
-  async function doSetup() {
-    const p1 = document.getElementById('setup-pwd').value;
-    const p2 = document.getElementById('setup-pwd2').value;
-    const err = document.getElementById('gate-err-setup');
+  function doLogin() {
+    const user = document.getElementById('login-user').value.trim().toLowerCase();
+    const pin  = document.getElementById('login-pin').value.trim();
+    const err  = document.getElementById('gate-err-login');
     err.textContent = '';
-    if (p1.length < 6) { err.textContent = 'Minimum 6 caractères'; return; }
-    if (p1 !== p2) { err.textContent = 'Les mots de passe ne correspondent pas'; return; }
-    localStorage.setItem(_HK, await _sha256(p1));
-    sessionStorage.setItem(_SK, '1');
-    _showAdmin();
-  }
-
-  async function doLogin() {
-    const pwd = document.getElementById('login-pwd').value;
-    const err = document.getElementById('gate-err-login');
-    err.textContent = '';
-    if (!pwd) { err.textContent = 'Entrez votre mot de passe'; return; }
-    if (await _sha256(pwd) === localStorage.getItem(_HK)) {
+    if (!user || !pin) { err.textContent = 'Remplissez les deux champs'; return; }
+    if (STAFF_ACCOUNTS[user] && STAFF_ACCOUNTS[user] === pin) {
       sessionStorage.setItem(_SK, '1');
       _showAdmin();
     } else {
-      err.textContent = 'Mot de passe incorrect';
-      document.getElementById('login-pwd').value = '';
-      document.getElementById('login-pwd').focus();
+      err.textContent = 'Code utilisateur ou PIN incorrect';
+      document.getElementById('login-pin').value = '';
+      document.getElementById('login-pin').focus();
     }
   }
 
@@ -373,13 +356,10 @@
     location.reload();
   }
 
-  // Gate init (runs immediately)
+  // Gate init
   (function() {
     if (sessionStorage.getItem(_SK) === '1') { _showAdmin(); return; }
-    const id = localStorage.getItem(_HK) ? 'gate-login' : 'gate-setup';
-    document.getElementById(id).style.display = 'flex';
-    // Focus first input
-    setTimeout(() => document.querySelector('#' + id + ' .gate-input')?.focus(), 100);
+    setTimeout(() => document.getElementById('login-user')?.focus(), 100);
   })();
 
   // ---- Admin Logic (called after auth) ----
