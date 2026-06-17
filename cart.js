@@ -110,6 +110,7 @@ function closeCheckout() {
   document.getElementById('checkout-panel').classList.remove('open');
   stopScan();
   document.getElementById('order-confirm').classList.remove('show');
+  document.getElementById('order-tracking').classList.remove('show');
   document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = '';
 }
 
@@ -188,15 +189,31 @@ function submitWithoutScan() {
 
 function onScanSuccess(data) {
   stopScan();
-  document.getElementById('qr-hint').textContent = data;
-  document.getElementById('qr-success').classList.add('show');
   const order = buildOrder(true);
-  saveOrder(order);
-  setTimeout(() => {
+  saveOrder(order).then(() => {
     cart.length = 0;
     renderCart();
-    closeCheckout();
-  }, 2500);
+    document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = 'none';
+    document.getElementById('tracking-ref').textContent = order.ref;
+    updateTrackingUI('en attente');
+    document.getElementById('order-tracking').classList.add('show');
+    startOrderTracking(order.ref);
+  });
+}
+
+function startOrderTracking(ref) {
+  db.channel('tracking-' + ref)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: 'ref=eq.' + ref },
+      payload => updateTrackingUI(payload.new.status))
+    .subscribe();
+}
+
+function updateTrackingUI(status) {
+  const steps = ['en attente', 'en preparation', 'pret', 'livre'];
+  const idx = steps.indexOf(status);
+  document.querySelectorAll('#order-tracking .tracking-step').forEach((step, i) => {
+    step.classList.toggle('active', i <= idx);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
