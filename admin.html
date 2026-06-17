@@ -149,6 +149,35 @@
 
     .order-card.priority { border-left: 3px solid #4caf50; }
 
+    .stat-card.clickable { cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; }
+    .stat-card.clickable:hover { box-shadow: 0 4px 16px rgba(139,26,26,0.15); transform: translateY(-2px); }
+
+    /* REVENUE MODAL */
+    #revenue-modal {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(58,32,16,0.52);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    #revenue-modal.open { opacity: 1; pointer-events: all; }
+    .rev-inner {
+      background: #fff; border-radius: 24px 24px 0 0;
+      width: 100%; max-width: 720px;
+      padding: 1.6rem 1.6rem 2rem;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    #revenue-modal.open .rev-inner { transform: translateY(0); }
+    .rev-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+    .rev-title { font-family: 'Playfair Display', serif; font-style: italic; color: var(--red); font-size: 1.3rem; }
+    .rev-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-top: 3px; }
+    .rev-close { background: none; border: none; font-size: 1.1rem; color: var(--brown-light); cursor: pointer; }
+    .rev-total-row { margin-bottom: 1.4rem; line-height: 1; }
+    #rev-total-val { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--red); }
+    .rev-dt { font-size: 1rem; color: var(--gold); margin-left: 5px; }
+    #revenue-canvas { width: 100%; display: block; }
+
     @media (max-width: 600px) {
       .stats-bar { padding: 1rem; }
       .orders-container { padding: 0 1rem 2rem; }
@@ -182,10 +211,10 @@
     <div class="s-value" id="stat-waiting">0</div>
     <div class="s-sub">à préparer</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-card clickable" onclick="openRevenueModal()" title="Voir l'évolution du CA">
     <div class="s-label">Chiffre d'affaires</div>
     <div class="s-value" id="stat-revenue">0</div>
-    <div class="s-sub">dinars</div>
+    <div class="s-sub">dinars · voir courbe ↗</div>
   </div>
   <div class="stat-card">
     <div class="s-label">Livrées</div>
@@ -204,6 +233,23 @@
 
 <div class="orders-container">
   <div class="orders-grid" id="orders-grid"></div>
+</div>
+
+<!-- REVENUE CHART MODAL -->
+<div id="revenue-modal">
+  <div class="rev-inner">
+    <div class="rev-header">
+      <div>
+        <div class="rev-title">Chiffre d'affaires</div>
+        <div class="rev-sub">Évolution cumulée · <span id="rev-orders-count">0</span> commandes</div>
+      </div>
+      <button class="rev-close" onclick="closeRevenueModal()">✕</button>
+    </div>
+    <div class="rev-total-row">
+      <span id="rev-total-val">0.000</span><span class="rev-dt">DT</span>
+    </div>
+    <canvas id="revenue-canvas"></canvas>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -305,6 +351,117 @@
   }
 
   fetchOrders();
+
+  // ---- Revenue chart modal ----
+  let _revOpenedAt = 0;
+
+  function openRevenueModal() {
+    _revOpenedAt = Date.now();
+    const total = allOrders.reduce((s, o) => s + parseFloat(o.total || 0), 0);
+    document.getElementById('rev-total-val').textContent = total.toFixed(3);
+    document.getElementById('rev-orders-count').textContent = allOrders.length;
+    document.getElementById('revenue-modal').classList.add('open');
+    setTimeout(drawRevenueChart, 60);
+  }
+
+  function closeRevenueModal() {
+    document.getElementById('revenue-modal').classList.remove('open');
+  }
+
+  document.getElementById('revenue-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('revenue-modal') && Date.now() - _revOpenedAt > 400)
+      closeRevenueModal();
+  });
+
+  function drawRevenueChart() {
+    const canvas = document.getElementById('revenue-canvas');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = canvas.parentElement.clientWidth;
+    const H = 190;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.height = H + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const RED = '#8B1A1A', GOLD = '#c9956a', GRID = '#f0e4d0', AXIS = '#e2c9a8';
+    const pL = 52, pR = 16, pT = 16, pB = 38;
+    const cW = W - pL - pR, cH = H - pT - pB;
+
+    const sorted = [...allOrders].sort((a, b) => {
+      const ts = o => {
+        const [d, m, y] = (o.date || '01/01/2024').split('/');
+        const [hh, mm] = (o.time || '00:00').split(':');
+        return new Date(+y, +m - 1, +d, +hh, +mm).getTime();
+      };
+      return ts(a) - ts(b);
+    });
+
+    ctx.clearRect(0, 0, W, H);
+
+    if (sorted.length === 0) {
+      ctx.font = '13px Inter, sans-serif';
+      ctx.fillStyle = GOLD;
+      ctx.textAlign = 'center';
+      ctx.fillText('Aucune commande pour le moment', W / 2, H / 2);
+      return;
+    }
+
+    let cum = 0;
+    const pts = sorted.map((o, i) => {
+      cum += parseFloat(o.total || 0);
+      return { i, y: cum, label: o.time || '' };
+    });
+
+    const maxY = pts[pts.length - 1].y || 1;
+    const n = pts.length;
+    const px = i => pL + (n === 1 ? cW / 2 : (i / (n - 1)) * cW);
+    const py = v => pT + cH - (v / maxY) * cH;
+
+    // Grid lines + Y labels
+    for (let t = 0; t <= 4; t++) {
+      const v = (maxY / 4) * t;
+      const y = py(v);
+      ctx.strokeStyle = GRID; ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+      ctx.font = '9px Inter, sans-serif'; ctx.fillStyle = GOLD; ctx.textAlign = 'right';
+      ctx.fillText(v.toFixed(0), pL - 5, y + 3.5);
+    }
+
+    // Axes
+    ctx.strokeStyle = AXIS; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pL, pT); ctx.lineTo(pL, pT + cH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL, pT + cH); ctx.lineTo(W - pR, pT + cH); ctx.stroke();
+
+    // Area fill
+    const grad = ctx.createLinearGradient(0, pT, 0, pT + cH);
+    grad.addColorStop(0, 'rgba(139,26,26,0.2)');
+    grad.addColorStop(1, 'rgba(139,26,26,0.01)');
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(px(i), py(p.y)) : ctx.lineTo(px(i), py(p.y)));
+    ctx.lineTo(px(n - 1), pT + cH); ctx.lineTo(px(0), pT + cH); ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(px(i), py(p.y)) : ctx.lineTo(px(i), py(p.y)));
+    ctx.strokeStyle = RED; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Dots
+    pts.forEach((p, i) => {
+      ctx.beginPath(); ctx.arc(px(i), py(p.y), 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.strokeStyle = RED; ctx.lineWidth = 2; ctx.stroke();
+    });
+
+    // X labels (max ~6)
+    const step = Math.max(1, Math.ceil(n / 6));
+    ctx.font = '9px Inter, sans-serif'; ctx.fillStyle = GOLD; ctx.textAlign = 'center';
+    pts.forEach((p, i) => {
+      if (i % step === 0 || i === n - 1) ctx.fillText(p.label, px(i), pT + cH + 20);
+    });
+  }
 </script>
 </body>
 </html>

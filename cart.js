@@ -188,14 +188,34 @@ function onScanSuccess(data) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Nespresso toggles (origine / arôme) — radio select per group, click again to deselect
+  document.querySelectorAll('.nesp-toggle').forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const group = toggle.dataset.group;
+      const wasActive = toggle.classList.contains('active');
+      document.querySelectorAll(`.nesp-toggle[data-group="${group}"]`).forEach(t => t.classList.remove('active'));
+      if (!wasActive) toggle.classList.add('active');
+    });
+  });
+
   document.querySelectorAll('.dropdown-item').forEach(item => {
     const name = item.querySelector('.dropdown-item-name').textContent.trim();
     const price = item.querySelector('.dropdown-item-price').textContent.trim();
     item.style.cursor = 'pointer';
     item.addEventListener('click', (e) => {
       e.stopPropagation();
-      addToCart(name, price);
-
+      if (item.dataset.nespresso) {
+        let extras = [], extra = 0;
+        ['origine', 'arome'].forEach(group => {
+          const active = document.querySelector(`.nesp-toggle[data-group="${group}"].active`);
+          if (active) { extras.push(active.dataset.name); extra += parseFloat(active.dataset.price); }
+        });
+        const cartName = extras.length ? name + ' · ' + extras.join(', ') : name;
+        addToCart(cartName, parseFloat(price) + extra);
+      } else {
+        addToCart(name, price);
+      }
       item.classList.add('added');
       setTimeout(() => item.classList.remove('added'), 600);
     });

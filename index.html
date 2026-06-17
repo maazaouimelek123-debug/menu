@@ -18,7 +18,6 @@
       <li><a href="#menu">Menu</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="#menu" class="nav-cta">Voir le menu</a></li>
-      <li><a href="admin.html" style="color:rgba(232,201,160,0.6);font-size:0.7rem;">Admin</a></li>
     </ul>
     <div class="hamburger" id="hamburger" onclick="toggleNav()">
       <span></span><span></span><span></span>
@@ -47,25 +46,47 @@
 
   <!-- ABOUT -->
   <section id="about" style="background: var(--beige);">
-    <div class="about">
-      <div class="about-img">
-        <div class="about-img-inner">B</div>
-        <div class="about-img-badge">Depuis toujours ☕</div>
+    <div class="section-header">
+      <div class="label">Choix du client</div>
+      <h2>Les incontournables</h2>
+      <p>Les favoris de nos habitués</p>
+    </div>
+    <div class="popular-grid">
+      <div class="popular-card">
+        <div class="popular-icon">✨</div>
+        <div class="popular-cat">Nespresso</div>
+        <div class="popular-name">Cappuccino</div>
+        <div class="popular-price">9.500 DT</div>
       </div>
-      <div class="about-content">
-        <div class="label">Notre histoire</div>
-        <h2>L'art du café à la tunisienne</h2>
-        <p>
-          Alliant savoir-faire artisanal et ambiance moderne, Bisou offre une large sélection de cafés, allant des expressos intenses aux cappuccinos soyeux.
-        </p>
-        <p>
-          Les gourmands se régalent aussi avec des pâtisseries fraîches et faites maison, préparées chaque jour pour accompagner leur boisson préférée.
-        </p>
-        <div class="about-stats">
-          <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Boissons</span></div>
-          <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Artisanal</span></div>
-          <div class="stat"><span class="stat-num">☕</span><span class="stat-label">Passion</span></div>
-        </div>
+      <div class="popular-card">
+        <div class="popular-icon">🧋</div>
+        <div class="popular-cat">Frappuccino</div>
+        <div class="popular-name">Vanille</div>
+        <div class="popular-price">15.500 DT</div>
+      </div>
+      <div class="popular-card">
+        <div class="popular-icon">🥞</div>
+        <div class="popular-cat">Crêpes</div>
+        <div class="popular-name">Nutella, banane</div>
+        <div class="popular-price">17.500 DT</div>
+      </div>
+      <div class="popular-card">
+        <div class="popular-icon">🌿</div>
+        <div class="popular-cat">Mojito</div>
+        <div class="popular-name">Fraise</div>
+        <div class="popular-price">13.500 DT</div>
+      </div>
+      <div class="popular-card">
+        <div class="popular-icon">🥤</div>
+        <div class="popular-cat">Milk Shake</div>
+        <div class="popular-name">Vanille</div>
+        <div class="popular-price">15.500 DT</div>
+      </div>
+      <div class="popular-card">
+        <div class="popular-icon">🌟</div>
+        <div class="popular-cat">Bisou Croustillant</div>
+        <div class="popular-name">Nutella</div>
+        <div class="popular-price">16.000 DT</div>
       </div>
     </div>
   </section>
@@ -120,18 +141,18 @@
         <div class="card-dropdown">
           <div class="card-sticky-title"><h3>Nespresso</h3><div class="card-count">5 boissons · dès 7.700</div></div>
           <div class="dropdown-inner">
-            <div class="dropdown-item"><span class="dropdown-item-name">Nespresso</span><span class="dropdown-item-price">7.700</span></div>
-            <div class="dropdown-item"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">7.900</span></div>
-            <div class="dropdown-item"><span class="dropdown-item-name">Café crème</span><span class="dropdown-item-price">8.900</span></div>
-            <div class="dropdown-item"><span class="dropdown-item-name">Cappuccino</span><span class="dropdown-item-price">9.500</span></div>
-            <div class="dropdown-item"><span class="dropdown-item-name">Américan</span><span class="dropdown-item-price">7.900</span></div>
-            <div class="dropdown-sub">Origine (+)</div>
-            <div class="dropdown-addon"><span>India</span><span>+0.800</span></div>
-            <div class="dropdown-addon"><span>Brazil</span><span>+0.800</span></div>
-            <div class="dropdown-sub">Arôme (+)</div>
-            <div class="dropdown-addon"><span>Vanille</span><span>+0.500</span></div>
-            <div class="dropdown-addon"><span>Noisette</span><span>+0.800</span></div>
-            <div class="dropdown-addon"><span>Caramel</span><span>+0.500</span></div>
+            <div class="dropdown-item" data-nespresso="true"><span class="dropdown-item-name">Nespresso</span><span class="dropdown-item-price">7.700</span></div>
+            <div class="dropdown-item" data-nespresso="true"><span class="dropdown-item-name">Macchiato</span><span class="dropdown-item-price">7.900</span></div>
+            <div class="dropdown-item" data-nespresso="true"><span class="dropdown-item-name">Café crème</span><span class="dropdown-item-price">8.900</span></div>
+            <div class="dropdown-item" data-nespresso="true"><span class="dropdown-item-name">Cappuccino</span><span class="dropdown-item-price">9.500</span></div>
+            <div class="dropdown-item" data-nespresso="true"><span class="dropdown-item-name">Américan</span><span class="dropdown-item-price">7.900</span></div>
+            <div class="dropdown-sub">Origine</div>
+            <div class="dropdown-addon nesp-toggle" data-group="origine" data-name="India" data-price="0.800"><span>India</span><span>+0.800</span></div>
+            <div class="dropdown-addon nesp-toggle" data-group="origine" data-name="Brazil" data-price="0.800"><span>Brazil</span><span>+0.800</span></div>
+            <div class="dropdown-sub">Arôme</div>
+            <div class="dropdown-addon nesp-toggle" data-group="arome" data-name="Vanille" data-price="0.500"><span>Vanille</span><span>+0.500</span></div>
+            <div class="dropdown-addon nesp-toggle" data-group="arome" data-name="Noisette" data-price="0.800"><span>Noisette</span><span>+0.800</span></div>
+            <div class="dropdown-addon nesp-toggle" data-group="arome" data-name="Caramel" data-price="0.500"><span>Caramel</span><span>+0.500</span></div>
           </div>
         </div>
       </div>
@@ -343,7 +364,7 @@
 
       <!-- MILK SHAKE -->
       <div class="menu-card" onclick="toggleCard(this)">
-        <img class="card-photo" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80" alt="Milk Shake" loading="lazy" />
+        <img class="card-photo" src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&q=80" alt="Milk Shake" loading="lazy" />
         <div class="card-overlay"></div>
         <div class="card-label">
           <div>
@@ -389,7 +410,7 @@
 
       <!-- SMOOTHIES -->
       <div class="menu-card" onclick="toggleCard(this)">
-        <img class="card-photo" src="https://images.unsplash.com/photo-1553530666-ba11a90a3a4d?w=600&q=80" alt="Smoothies" loading="lazy" />
+        <img class="card-photo" src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=600&q=80" alt="Smoothies" loading="lazy" />
         <div class="card-overlay"></div>
         <div class="card-label">
           <div>
