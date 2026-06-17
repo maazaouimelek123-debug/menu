@@ -52,41 +52,47 @@
       <p>Les favoris de nos habitués</p>
     </div>
     <div class="popular-grid">
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Cappuccino Nespresso',9.500)">
         <div class="popular-icon">✨</div>
         <div class="popular-cat">Nespresso</div>
         <div class="popular-name">Cappuccino</div>
         <div class="popular-price">9.500 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Frappuccino Vanille',15.500)">
         <div class="popular-icon">🧋</div>
         <div class="popular-cat">Frappuccino</div>
         <div class="popular-name">Vanille</div>
         <div class="popular-price">15.500 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Crêpes Nutella, banane',17.500)">
         <div class="popular-icon">🥞</div>
         <div class="popular-cat">Crêpes</div>
         <div class="popular-name">Nutella, banane</div>
         <div class="popular-price">17.500 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Mojito Fraise',13.500)">
         <div class="popular-icon">🌿</div>
         <div class="popular-cat">Mojito</div>
         <div class="popular-name">Fraise</div>
         <div class="popular-price">13.500 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Milk Shake Vanille',15.500)">
         <div class="popular-icon">🥤</div>
         <div class="popular-cat">Milk Shake</div>
         <div class="popular-name">Vanille</div>
         <div class="popular-price">15.500 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
-      <div class="popular-card">
+      <div class="popular-card" onclick="addFromPopular(this,'Bisou Croustillant Nutella',16.000)">
         <div class="popular-icon">🌟</div>
         <div class="popular-cat">Bisou Croustillant</div>
         <div class="popular-name">Nutella</div>
         <div class="popular-price">16.000 DT</div>
+        <div class="popular-add">+ Ajouter</div>
       </div>
     </div>
   </section>
@@ -492,12 +498,12 @@
 
     <div class="map-wrapper">
       <iframe
-        src="https://www.openstreetmap.org/export/embed.html?bbox=10.1947%2C36.7190%2C10.2547%2C36.7590&layer=mapnik&marker=36.7390%2C10.2247"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=10.2753%2C36.7070%2C10.3453%2C36.7570&layer=mapnik&marker=36.7320%2C10.3103"
         width="100%" height="320" style="border:0;" allowfullscreen="" loading="lazy"
-        title="Boumhel El Bassatine sur la carte">
+        title="BISOU Coffee &amp; Bakery sur la carte">
       </iframe>
     </div>
-    <a class="map-gmaps-btn" href="https://maps.google.com/?q=Boumhel+El+Bassatine,+Ben+Arous,+Tunisie" target="_blank" rel="noopener">
+    <a class="map-gmaps-btn" href="https://www.google.com/maps/place/BISOU/@36.73209,10.3094954,17.42z" target="_blank" rel="noopener">
       Ouvrir dans Google Maps →
     </a>
   </section>
@@ -555,6 +561,12 @@
           </button>
         </div>
       </div>
+    </div>
+    <div class="order-confirm" id="order-confirm">
+      <div class="order-confirm-icon">✓</div>
+      <div class="order-confirm-title">Commande envoyée !</div>
+      <div class="order-confirm-ref" id="order-confirm-ref"></div>
+      <p class="order-confirm-msg">Votre commande a bien été reçue.<br>Vous serez servi dans quelques minutes.</p>
     </div>
   </div>
 

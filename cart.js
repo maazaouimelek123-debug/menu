@@ -1,5 +1,11 @@
 const cart = [];
 
+function addFromPopular(el, name, price) {
+  addToCart(name, price);
+  el.classList.add('added');
+  setTimeout(() => el.classList.remove('added'), 380);
+}
+
 function addToCart(name, price) {
   const existing = cart.find(i => i.name === name);
   if (existing) {
@@ -103,6 +109,8 @@ function checkout() {
 function closeCheckout() {
   document.getElementById('checkout-panel').classList.remove('open');
   stopScan();
+  document.getElementById('order-confirm').classList.remove('show');
+  document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = '';
 }
 
 let scanStream = null;
@@ -168,9 +176,14 @@ function saveOrder(order) {
 function submitWithoutScan() {
   const order = buildOrder(false);
   saveOrder(order).then(() => {
-    cart.length = 0;
-    renderCart();
-    closeCheckout();
+    document.getElementById('order-confirm-ref').textContent = order.ref;
+    document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = 'none';
+    document.getElementById('order-confirm').classList.add('show');
+    setTimeout(() => {
+      cart.length = 0;
+      renderCart();
+      closeCheckout();
+    }, 3000);
   });
 }
 
