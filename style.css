@@ -35,7 +35,7 @@ nav {
   border-bottom: 1px solid rgba(201,149,106,0.3);
 }
 .nav-logo {
-  grid-column: 3;
+  grid-column: 1;
   display: flex; align-items: center;
   text-decoration: none;
 }
@@ -65,7 +65,7 @@ nav {
   padding: 8px 22px; border-radius: 20px; font-weight: 500 !important;
 }
 .nav-cta:hover { background: var(--beige-dark) !important; color: var(--red) !important; }
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; grid-column: 1; justify-self: start; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; grid-column: 3; justify-self: end; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--beige); border-radius: 2px; transition: 0.3s; }
 
 /* HERO */
