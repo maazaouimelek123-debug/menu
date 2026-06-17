@@ -287,7 +287,7 @@
     <div class="s-sub">dinars · voir courbe ↗</div>
   </div>
   <div class="stat-card">
-    <div class="s-label">Livrées</div>
+    <div class="s-label">Servis</div>
     <div class="s-value" id="stat-done">0</div>
     <div class="s-sub">complétées</div>
   </div>
@@ -298,7 +298,7 @@
   <button class="filter-btn" onclick="setFilter('en attente', this)">En attente</button>
   <button class="filter-btn" onclick="setFilter('en preparation', this)">En préparation</button>
   <button class="filter-btn" onclick="setFilter('pret', this)">Prêt</button>
-  <button class="filter-btn" onclick="setFilter('livre', this)">Livré</button>
+  <button class="filter-btn" onclick="setFilter('livre', this)">Servi</button>
 </div>
 
 <div class="orders-container">
@@ -384,7 +384,7 @@
 
   // ---- Admin Logic (called after auth) ----
   const STATUSES = ['en attente', 'en preparation', 'pret', 'livre'];
-  const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Livré' };
+  const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Servi' };
   let currentFilter = 'all';
   let allOrders = [];
 
