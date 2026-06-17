@@ -176,7 +176,6 @@ function saveOrder(order) {
 function submitWithoutScan() {
   const order = buildOrder(false);
   saveOrder(order).then(() => {
-    document.getElementById('order-confirm-ref').textContent = order.ref;
     document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = 'none';
     document.getElementById('order-confirm').classList.add('show');
     setTimeout(() => {
