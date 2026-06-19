@@ -236,37 +236,6 @@
 <!-- ====== GATE ====== -->
 <div id="admin-gate">
 
-  <!-- Chargement -->
-  <div id="gate-loading"><div class="gate-spinner"></div></div>
-
-  <!-- Première config : créer le super admin -->
-  <div class="gate-card" id="gate-bootstrap" style="display:none;">
-    <div class="gate-lock">🔐</div>
-    <div class="gate-logo">BISOU</div>
-    <div class="gate-title">Créer le compte admin</div>
-    <div class="gate-sub">Première configuration</div>
-    <div class="gate-field">
-      <label for="bs-username">Identifiant</label>
-      <input type="text" id="bs-username" class="gate-input" placeholder="ex : admin"
-             autocomplete="username"
-             onkeydown="if(event.key==='Enter')document.getElementById('bs-pwd').focus()" />
-    </div>
-    <div class="gate-field">
-      <label for="bs-pwd">Mot de passe (min. 6 car.)</label>
-      <input type="password" id="bs-pwd" class="gate-input" placeholder="••••••"
-             autocomplete="new-password"
-             onkeydown="if(event.key==='Enter')document.getElementById('bs-pwd2').focus()" />
-    </div>
-    <div class="gate-field">
-      <label for="bs-pwd2">Confirmer</label>
-      <input type="password" id="bs-pwd2" class="gate-input" placeholder="••••••"
-             autocomplete="new-password"
-             onkeydown="if(event.key==='Enter')doBootstrap()" />
-    </div>
-    <button class="gate-btn" onclick="doBootstrap()">Créer le compte</button>
-    <div class="gate-err" id="gate-err-bs"></div>
-  </div>
-
   <!-- Connexion -->
   <div class="gate-card" id="gate-login" style="display:none;">
     <div class="gate-lock">🔒</div>
@@ -418,45 +387,11 @@
   }
 
   /* ---- Gate init ---- */
-  async function initGate() {
+  function initGate() {
     const session = _getSession();
     if (session) { _showAdmin(session); return; }
-
-    const { data, error } = await db.rpc('admin_exists');
-    document.getElementById('gate-loading').style.display = 'none';
-
-    if (error) {
-      // Fonctions pas encore créées → afficher bootstrap quand même
-      document.getElementById('gate-bootstrap').style.display = 'flex';
-      setTimeout(() => document.getElementById('bs-username').focus(), 100);
-      return;
-    }
-    if (!data) {
-      document.getElementById('gate-bootstrap').style.display = 'flex';
-      setTimeout(() => document.getElementById('bs-username').focus(), 100);
-    } else {
-      document.getElementById('gate-login').style.display = 'flex';
-      setTimeout(() => document.getElementById('login-username').focus(), 100);
-    }
-  }
-
-  async function doBootstrap() {
-    const username = document.getElementById('bs-username').value.trim();
-    const p1 = document.getElementById('bs-pwd').value;
-    const p2 = document.getElementById('bs-pwd2').value;
-    const err = document.getElementById('gate-err-bs');
-    err.textContent = '';
-    if (!username)     { err.textContent = 'Identifiant requis'; return; }
-    if (p1.length < 6) { err.textContent = 'Minimum 6 caractères'; return; }
-    if (p1 !== p2)     { err.textContent = 'Les mots de passe ne correspondent pas'; return; }
-
-    const { data, error } = await db.rpc('admin_bootstrap', {
-      p_username: username, p_hash: await _sha256(p1), p_display_name: username
-    });
-    if (error || !data || data.error) { err.textContent = (data&&data.error)||'Erreur — avez-vous exécuté le SQL dans Supabase ?'; return; }
-    const user = { id: data.id, username: data.username, display_name: data.display_name, role: data.role };
-    _setSession(user);
-    _showAdmin(user);
+    document.getElementById('gate-login').style.display = 'flex';
+    setTimeout(() => document.getElementById('login-username').focus(), 100);
   }
 
   async function doLogin() {
