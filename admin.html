@@ -249,11 +249,6 @@
       <label for="bs-username">Identifiant</label>
       <input type="text" id="bs-username" class="gate-input" placeholder="ex : admin"
              autocomplete="username"
-             onkeydown="if(event.key==='Enter')document.getElementById('bs-display').focus()" />
-    </div>
-    <div class="gate-field">
-      <label for="bs-display">Nom affiché</label>
-      <input type="text" id="bs-display" class="gate-input" placeholder="Prénom Nom"
              onkeydown="if(event.key==='Enter')document.getElementById('bs-pwd').focus()" />
     </div>
     <div class="gate-field">
@@ -386,7 +381,6 @@
       <div class="add-user-title">Ajouter un utilisateur</div>
       <div class="add-user-grid">
         <input type="text" id="new-username" class="u-input" placeholder="Identifiant" autocomplete="off" />
-        <input type="text" id="new-display" class="u-input" placeholder="Nom affiché" autocomplete="off" />
         <input type="password" id="new-pwd" class="u-input" placeholder="Mot de passe (min. 6 car.)" autocomplete="new-password" />
         <select id="new-role" class="u-select">
           <option value="admin">Admin</option>
@@ -448,7 +442,6 @@
 
   async function doBootstrap() {
     const username = document.getElementById('bs-username').value.trim();
-    const display  = document.getElementById('bs-display').value.trim();
     const p1 = document.getElementById('bs-pwd').value;
     const p2 = document.getElementById('bs-pwd2').value;
     const err = document.getElementById('gate-err-bs');
@@ -458,7 +451,7 @@
     if (p1 !== p2)     { err.textContent = 'Les mots de passe ne correspondent pas'; return; }
 
     const { data, error } = await db.rpc('admin_bootstrap', {
-      p_username: username, p_hash: await _sha256(p1), p_display_name: display || username
+      p_username: username, p_hash: await _sha256(p1), p_display_name: username
     });
     if (error || !data || data.error) { err.textContent = (data&&data.error)||'Erreur — avez-vous exécuté le SQL dans Supabase ?'; return; }
     const user = { id: data.id, username: data.username, display_name: data.display_name, role: data.role };
@@ -665,7 +658,6 @@
   async function createUser() {
     const session = _getSession();
     const username = document.getElementById('new-username').value.trim();
-    const display  = document.getElementById('new-display').value.trim();
     const pwd  = document.getElementById('new-pwd').value;
     const role = document.getElementById('new-role').value;
     const err  = document.getElementById('users-err');
@@ -675,11 +667,11 @@
 
     const { data, error } = await db.rpc('admin_create_user', {
       p_username: username, p_hash: await _sha256(pwd),
-      p_display_name: display||username, p_role: role,
+      p_display_name: username, p_role: role,
       p_requester_id: session.id
     });
     if (error||(data&&data.error)) { err.textContent=(data&&data.error)||(error&&error.message)||'Erreur'; return; }
-    ['new-username','new-display','new-pwd'].forEach(id=>document.getElementById(id).value='');
+    ['new-username','new-pwd'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('new-role').value='admin';
     await loadUsers();
   }
