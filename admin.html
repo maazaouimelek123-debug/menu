@@ -15,68 +15,76 @@
     }
     body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--brown); min-height: 100vh; }
 
-    /* ADMIN GATE */
+    /* ---- GATE ---- */
     #admin-gate {
       position: fixed; inset: 0; z-index: 9999;
       background: var(--red);
       display: flex; align-items: center; justify-content: center;
       padding: 1.5rem;
     }
+    .gate-spinner {
+      width: 28px; height: 28px; border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .gate-card {
-      background: #fff; border-radius: 20px;
+      background: #fff; border-radius: 22px;
       padding: 2.6rem 2rem 2rem;
-      width: 100%; max-width: 340px;
-      display: flex; flex-direction: column; gap: 1rem;
+      width: 100%; max-width: 370px;
+      display: flex; flex-direction: column; gap: 0.9rem;
       text-align: center;
     }
-    .gate-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem; letter-spacing: 6px; color: var(--red);
-    }
-    .gate-title {
-      font-family: 'Playfair Display', serif;
-      font-style: italic; color: var(--brown); font-size: 1.1rem;
-    }
-    .gate-sub {
-      font-size: 0.68rem; text-transform: uppercase;
-      letter-spacing: 2px; color: var(--gold); margin-top: -4px;
-    }
+    .gate-lock { font-size: 1.8rem; opacity: 0.13; margin-bottom: -4px; }
+    .gate-logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; letter-spacing: 6px; color: var(--red); }
+    .gate-title { font-family: 'Playfair Display', serif; font-style: italic; color: var(--brown); font-size: 1.1rem; }
+    .gate-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-top: -3px; }
+
+    .gate-field { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+    .gate-field label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); padding-left: 2px; }
     .gate-input {
-      width: 100%; border: 1.5px solid var(--beige-mid);
-      border-radius: 50px; padding: 0.75rem 1.2rem;
-      font-size: 0.88rem; outline: none; transition: border-color 0.2s;
-      font-family: 'Inter', sans-serif; color: var(--brown);
-      background: var(--cream); text-align: center;
+      width: 100%; border: 1.5px solid var(--beige-mid); border-radius: 50px;
+      padding: 0.72rem 1.1rem; font-size: 0.88rem; outline: none;
+      font-family: 'Inter', sans-serif; color: var(--brown); background: var(--cream);
+      transition: border-color 0.2s;
     }
     .gate-input:focus { border-color: var(--red); }
     .gate-btn {
       background: var(--red); color: #fff; border: none; border-radius: 50px;
       padding: 0.88rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px;
       cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif;
+      margin-top: 2px;
     }
     .gate-btn:hover { background: var(--red-dark); }
     .gate-btn:active { transform: scale(0.98); }
     .gate-err { font-size: 0.78rem; color: var(--red); min-height: 1.1rem; }
-    .gate-lock { font-size: 1.8rem; margin-bottom: -4px; opacity: 0.15; }
-    .gate-field { display: flex; flex-direction: column; gap: 6px; text-align: left; }
-    .gate-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); padding-left: 4px; }
 
-    /* TOP BAR */
+    /* ---- HEADER ---- */
     header {
-      background: var(--red);
-      padding: 0 2rem; height: 64px;
+      background: var(--red); padding: 0 2rem; height: 64px;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 10;
       border-bottom: 1px solid rgba(201,149,106,0.3);
     }
     .admin-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--beige); letter-spacing: 4px; text-decoration: none; }
     .admin-badge { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(232,201,160,0.7); }
-    .header-right { display: flex; align-items: center; gap: 1rem; }
-    #order-count-badge {
-      background: var(--beige); color: var(--red);
-      font-size: 0.75rem; font-weight: 500;
-      padding: 4px 12px; border-radius: 20px;
+    .header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; animation: pulse 2s infinite; display: inline-block; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .header-user { font-size: 0.75rem; color: var(--beige); opacity: 0.9; }
+    .header-role-pill {
+      font-size: 0.62rem; padding: 2px 9px; border-radius: 10px;
+      text-transform: uppercase; letter-spacing: 1px;
+      background: rgba(201,149,106,0.22); color: var(--gold);
     }
+    #order-count-badge { background: var(--beige); color: var(--red); font-size: 0.75rem; font-weight: 500; padding: 4px 12px; border-radius: 20px; }
+    .users-btn {
+      background: none; border: 1px solid rgba(201,149,106,0.4);
+      color: var(--gold); font-size: 0.72rem; padding: 5px 13px;
+      border-radius: 20px; cursor: pointer; transition: 0.2s;
+    }
+    .users-btn:hover { border-color: var(--gold); color: var(--beige); }
     .clear-btn {
       background: rgba(245,237,224,0.12); border: 1px solid rgba(245,237,224,0.3);
       color: var(--beige); font-size: 0.75rem; padding: 6px 14px;
@@ -84,33 +92,23 @@
     }
     .clear-btn:hover { background: rgba(245,237,224,0.22); }
     .logout-btn {
-      background: none; border: 1px solid rgba(245,237,224,0.3);
+      background: none; border: 1px solid rgba(245,237,224,0.25);
       color: rgba(232,201,160,0.7); font-size: 0.72rem; padding: 5px 12px;
       border-radius: 20px; cursor: pointer; transition: 0.2s;
     }
-    .logout-btn:hover { border-color: rgba(245,237,224,0.6); color: var(--beige); }
+    .logout-btn:hover { border-color: rgba(245,237,224,0.55); color: var(--beige); }
 
-    /* STATS */
-    .stats-bar {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem; padding: 1.5rem 2rem;
-      max-width: 1100px; margin: 0 auto;
-    }
-    .stat-card {
-      background: #fff; border: 0.5px solid var(--beige-mid);
-      border-radius: 12px; padding: 1.2rem 1.4rem;
-    }
+    /* ---- STATS ---- */
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .stat-card { background: #fff; border: 0.5px solid var(--beige-mid); border-radius: 12px; padding: 1.2rem 1.4rem; }
     .stat-card .s-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 6px; }
     .stat-card .s-value { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--red); }
     .stat-card .s-sub { font-size: 0.75rem; color: var(--brown-light); margin-top: 2px; }
     .stat-card.clickable { cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; }
     .stat-card.clickable:hover { box-shadow: 0 4px 16px rgba(139,26,26,0.15); transform: translateY(-2px); }
 
-    /* FILTERS */
-    .filters {
-      display: flex; gap: 8px; padding: 0 2rem 1.2rem;
-      max-width: 1100px; margin: 0 auto; flex-wrap: wrap;
-    }
+    /* ---- FILTERS ---- */
+    .filters { display: flex; gap: 8px; padding: 0 2rem 1.2rem; max-width: 1100px; margin: 0 auto; flex-wrap: wrap; }
     .filter-btn {
       background: transparent; border: 1px solid var(--beige-mid);
       color: var(--brown-light); padding: 6px 18px; border-radius: 20px;
@@ -119,268 +117,396 @@
     .filter-btn:hover { border-color: var(--red); color: var(--red); }
     .filter-btn.active { background: var(--red); color: var(--beige); border-color: var(--red); }
 
-    /* ORDERS GRID */
+    /* ---- ORDERS ---- */
     .orders-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem 3rem; }
     .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-
-    .order-card {
-      background: #fff; border: 0.5px solid var(--beige-mid);
-      border-radius: 14px; overflow: hidden; transition: box-shadow 0.2s;
-    }
+    .order-card { background: #fff; border: 0.5px solid var(--beige-mid); border-radius: 14px; overflow: hidden; transition: box-shadow 0.2s; }
     .order-card:hover { box-shadow: 0 4px 20px rgba(58,32,16,0.1); }
     .order-card.done { opacity: 0.55; }
-
-    .order-card-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 1.2rem 0.8rem;
-      border-bottom: 0.5px solid var(--beige-mid);
-    }
+    .order-card.priority { border-left: 3px solid #4caf50; }
+    .order-card-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem 0.8rem; border-bottom: 0.5px solid var(--beige-mid); }
     .order-ref { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--red); }
     .order-time { font-size: 0.75rem; color: var(--brown-light); }
-
-    .status-pill {
-      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.5px;
-      padding: 4px 12px; border-radius: 20px; border: none; cursor: pointer; transition: 0.2s;
-    }
+    .status-pill { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 20px; border: none; cursor: pointer; transition: 0.2s; }
     .status-pill.en-attente { background: #fff3e0; color: #e65100; }
     .status-pill.en-preparation { background: #e3f2fd; color: #1565c0; }
     .status-pill.pret { background: #e8f5e9; color: #2e7d32; }
-    .status-pill.livre { background: var(--beige-dark); color: var(--brown-light); }
-
+    .status-pill.servi { background: var(--beige-dark); color: var(--brown-light); }
     .order-items { padding: 0.8rem 1.2rem; display: flex; flex-direction: column; gap: 4px; }
-    .order-item-row {
-      display: flex; justify-content: space-between;
-      padding: 7px 12px; background: var(--cream);
-      border-radius: 50px; font-size: 0.82rem;
-    }
+    .order-item-row { display: flex; justify-content: space-between; padding: 7px 12px; background: var(--cream); border-radius: 50px; font-size: 0.82rem; }
     .order-item-name { color: var(--brown); }
     .order-item-qty { color: var(--gold); font-weight: 500; }
-
-    .order-card-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.8rem 1.2rem;
-      border-top: 0.5px solid var(--beige-mid);
-    }
+    .order-card-footer { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.2rem; border-top: 0.5px solid var(--beige-mid); }
     .order-total-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); }
     .order-total { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--red); }
-
-    /* EMPTY STATE */
+    .verify-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 500; padding: 3px 10px 3px 6px; border-radius: 20px; margin-top: 4px; }
+    .verify-badge .verify-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .verify-badge.verified { background: #e8f5e9; color: #2e7d32; }
+    .verify-badge.verified .verify-dot { background: #4caf50; }
+    .verify-badge.unverified { background: #fff8e1; color: #b45309; }
+    .verify-badge.unverified .verify-dot { background: #ffc107; }
     .empty-state { text-align: center; padding: 5rem 2rem; grid-column: 1 / -1; }
     .empty-state .e-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
     .empty-state p { font-size: 0.9rem; color: var(--brown-light); }
 
-    /* LIVE INDICATOR */
-    .live-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #4caf50;
-      animation: pulse 2s infinite; display: inline-block;
-    }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    .verify-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.7rem; font-weight: 500;
-      padding: 3px 10px 3px 6px; border-radius: 20px; margin-top: 4px;
-    }
-    .verify-badge .verify-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .verify-badge.verified   { background: #e8f5e9; color: #2e7d32; }
-    .verify-badge.verified .verify-dot { background: #4caf50; }
-    .verify-badge.unverified { background: #fff8e1; color: #b45309; }
-    .verify-badge.unverified .verify-dot { background: #ffc107; }
-
-    .order-card.priority { border-left: 3px solid #4caf50; }
-
-    /* REVENUE MODAL */
-    #revenue-modal {
+    /* ---- MODALS (shared) ---- */
+    .bottom-modal {
       position: fixed; inset: 0; z-index: 200;
       background: rgba(58,32,16,0.52);
       display: flex; align-items: flex-end; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
-    #revenue-modal.open { opacity: 1; pointer-events: all; }
-    .rev-inner {
+    .bottom-modal.open { opacity: 1; pointer-events: all; }
+    .modal-inner {
       background: #fff; border-radius: 24px 24px 0 0;
-      width: 100%; max-width: 720px;
+      width: 100%; max-width: 680px;
       padding: 1.6rem 1.6rem 2rem;
       transform: translateY(100%);
       transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
     }
-    #revenue-modal.open .rev-inner { transform: translateY(0); }
-    .rev-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
-    .rev-title { font-family: 'Playfair Display', serif; font-style: italic; color: var(--red); font-size: 1.3rem; }
-    .rev-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-top: 3px; }
-    .rev-close { background: none; border: none; font-size: 1.1rem; color: var(--brown-light); cursor: pointer; }
+    .bottom-modal.open .modal-inner { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .modal-title { font-family: 'Playfair Display', serif; font-style: italic; color: var(--red); font-size: 1.3rem; }
+    .modal-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-top: 3px; }
+    .modal-close { background: none; border: none; font-size: 1.1rem; color: var(--brown-light); cursor: pointer; }
+
+    /* Revenue modal specifics */
+    #revenue-modal .modal-inner { max-width: 720px; }
     .rev-total-row { margin-bottom: 1.4rem; line-height: 1; }
     #rev-total-val { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--red); }
     .rev-dt { font-size: 1rem; color: var(--gold); margin-left: 5px; }
     #revenue-canvas { width: 100%; display: block; }
 
+    /* Users modal specifics */
+    #users-modal .modal-inner { max-width: 580px; max-height: 88vh; overflow-y: auto; }
+
+    .user-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.4rem; }
+    .user-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--cream); border-radius: 50px; padding: 0.55rem 0.9rem 0.55rem 1.2rem;
+    }
+    .user-row-info { display: flex; flex-direction: column; gap: 1px; }
+    .user-row-name { font-size: 0.87rem; color: var(--brown); font-weight: 500; }
+    .user-row-id { font-size: 0.7rem; color: var(--brown-light); }
+    .user-row-right { display: flex; align-items: center; gap: 7px; }
+    .role-pill { font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; background: rgba(139,26,26,0.1); color: var(--red); }
+    .user-del-btn {
+      background: none; border: 1px solid rgba(139,26,26,0.2);
+      color: var(--red); font-size: 0.68rem; padding: 3px 10px; border-radius: 12px;
+      cursor: pointer; transition: 0.2s;
+    }
+    .user-del-btn:hover { background: var(--red); color: #fff; }
+
+    .add-user-divider { border: none; border-top: 1px solid var(--beige-mid); margin: 0.2rem 0 1.2rem; }
+    .add-user-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 0.8rem; }
+    .add-user-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .add-user-grid .span2 { grid-column: 1 / -1; }
+    .u-input {
+      border: 1.5px solid var(--beige-mid); border-radius: 50px;
+      padding: 0.62rem 1rem; font-size: 0.83rem; outline: none; width: 100%;
+      font-family: 'Inter', sans-serif; color: var(--brown); background: var(--cream);
+      transition: border-color 0.2s;
+    }
+    .u-input:focus { border-color: var(--red); }
+    .u-select {
+      border: 1.5px solid var(--beige-mid); border-radius: 50px;
+      padding: 0.62rem 1rem; font-size: 0.83rem; outline: none; width: 100%;
+      font-family: 'Inter', sans-serif; color: var(--brown); background: var(--cream);
+      cursor: pointer; appearance: none;
+    }
+    .add-user-btn {
+      background: var(--red); color: #fff; border: none; border-radius: 50px;
+      padding: 0.72rem 1.4rem; font-size: 0.83rem; font-weight: 500;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .add-user-btn:hover { background: var(--red-dark); }
+    .users-err { font-size: 0.78rem; color: var(--red); min-height: 1rem; margin-top: 0.3rem; }
+
     @media (max-width: 600px) {
-      .stats-bar { padding: 1rem; }
-      .orders-container { padding: 0 1rem 2rem; }
-      .filters { padding: 0 1rem 1rem; }
+      .stats-bar, .orders-container, .filters { padding-left: 1rem; padding-right: 1rem; }
       header { padding: 0 1rem; }
+      .add-user-grid { grid-template-columns: 1fr; }
+      .add-user-grid .span2 { grid-column: 1; }
+      .header-user, .header-role-pill { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ====== ADMIN GATE ====== -->
+<!-- ====== GATE ====== -->
 <div id="admin-gate">
-  <div class="gate-card" id="gate-login">
+
+  <!-- Chargement -->
+  <div id="gate-loading"><div class="gate-spinner"></div></div>
+
+  <!-- Première config : créer le super admin -->
+  <div class="gate-card" id="gate-bootstrap" style="display:none;">
+    <div class="gate-lock">🔐</div>
+    <div class="gate-logo">BISOU</div>
+    <div class="gate-title">Créer le compte admin</div>
+    <div class="gate-sub">Première configuration</div>
+    <div class="gate-field">
+      <label for="bs-username">Identifiant</label>
+      <input type="text" id="bs-username" class="gate-input" placeholder="ex : admin"
+             autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('bs-display').focus()" />
+    </div>
+    <div class="gate-field">
+      <label for="bs-display">Nom affiché</label>
+      <input type="text" id="bs-display" class="gate-input" placeholder="Prénom Nom"
+             onkeydown="if(event.key==='Enter')document.getElementById('bs-pwd').focus()" />
+    </div>
+    <div class="gate-field">
+      <label for="bs-pwd">Mot de passe (min. 6 car.)</label>
+      <input type="password" id="bs-pwd" class="gate-input" placeholder="••••••"
+             autocomplete="new-password"
+             onkeydown="if(event.key==='Enter')document.getElementById('bs-pwd2').focus()" />
+    </div>
+    <div class="gate-field">
+      <label for="bs-pwd2">Confirmer</label>
+      <input type="password" id="bs-pwd2" class="gate-input" placeholder="••••••"
+             autocomplete="new-password"
+             onkeydown="if(event.key==='Enter')doBootstrap()" />
+    </div>
+    <button class="gate-btn" onclick="doBootstrap()">Créer le compte</button>
+    <div class="gate-err" id="gate-err-bs"></div>
+  </div>
+
+  <!-- Connexion -->
+  <div class="gate-card" id="gate-login" style="display:none;">
     <div class="gate-lock">🔒</div>
     <div class="gate-logo">BISOU</div>
     <div class="gate-title">Administration</div>
-    <div class="gate-sub">Accès staff</div>
+    <div class="gate-sub">Accès restreint</div>
     <div class="gate-field">
-      <span class="gate-label">Code utilisateur</span>
-      <input type="text" id="login-user" class="gate-input" placeholder="ex : admin"
-             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-             onkeydown="if(event.key==='Enter')document.getElementById('login-pin').focus()" />
+      <label for="login-username">Identifiant</label>
+      <input type="text" id="login-username" class="gate-input" placeholder="Votre identifiant"
+             autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('login-pwd').focus()" />
     </div>
     <div class="gate-field">
-      <span class="gate-label">Code PIN</span>
-      <input type="password" id="login-pin" class="gate-input" placeholder="••••••"
-             inputmode="numeric" maxlength="8"
+      <label for="login-pwd">Mot de passe</label>
+      <input type="password" id="login-pwd" class="gate-input" placeholder="••••••"
+             autocomplete="current-password"
              onkeydown="if(event.key==='Enter')doLogin()" />
     </div>
-    <button class="gate-btn" onclick="doLogin()">Accéder</button>
+    <button class="gate-btn" onclick="doLogin()">Connexion</button>
     <div class="gate-err" id="gate-err-login"></div>
   </div>
+
 </div>
 
-<!-- ====== CONTENU ADMIN (masqué jusqu'à authentification) ====== -->
+<!-- ====== CONTENU ADMIN ====== -->
 <div id="admin-content" style="display:none;">
 
-<header>
-  <div>
-    <a href="#" class="admin-logo">BISOU</a>
-    <div class="admin-badge">Administration</div>
-  </div>
-  <div class="header-right">
-    <span class="live-dot"></span>
-    <span id="order-count-badge">0 commande</span>
-    <button class="clear-btn" onclick="clearAll()">Tout effacer</button>
-    <button class="logout-btn" onclick="doLogout()">Déconnexion</button>
-  </div>
-</header>
+  <header>
+    <div>
+      <a href="#" class="admin-logo">BISOU</a>
+      <div class="admin-badge">Administration</div>
+    </div>
+    <div class="header-right">
+      <span class="live-dot"></span>
+      <span class="header-user" id="header-username"></span>
+      <span class="header-role-pill" id="header-role"></span>
+      <span id="order-count-badge">0 commande</span>
+      <button class="users-btn" id="users-btn" onclick="openUsersModal()" style="display:none;">Utilisateurs</button>
+      <button class="clear-btn" onclick="clearAll()">Tout effacer</button>
+      <button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </header>
 
-<div class="stats-bar" id="stats-bar">
-  <div class="stat-card">
-    <div class="s-label">Total commandes</div>
-    <div class="s-value" id="stat-total">0</div>
-    <div class="s-sub">aujourd'hui</div>
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="s-label">Total commandes</div>
+      <div class="s-value" id="stat-total">0</div>
+      <div class="s-sub">aujourd'hui</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">En attente</div>
+      <div class="s-value" id="stat-waiting">0</div>
+      <div class="s-sub">à préparer</div>
+    </div>
+    <div class="stat-card clickable" onclick="openRevenueModal()" title="Voir l'évolution du CA">
+      <div class="s-label">Chiffre d'affaires</div>
+      <div class="s-value" id="stat-revenue">0</div>
+      <div class="s-sub">dinars · voir courbe ↗</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Servis</div>
+      <div class="s-value" id="stat-done">0</div>
+      <div class="s-sub">complétées</div>
+    </div>
   </div>
-  <div class="stat-card">
-    <div class="s-label">En attente</div>
-    <div class="s-value" id="stat-waiting">0</div>
-    <div class="s-sub">à préparer</div>
-  </div>
-  <div class="stat-card clickable" onclick="openRevenueModal()" title="Voir l'évolution du CA">
-    <div class="s-label">Chiffre d'affaires</div>
-    <div class="s-value" id="stat-revenue">0</div>
-    <div class="s-sub">dinars · voir courbe ↗</div>
-  </div>
-  <div class="stat-card">
-    <div class="s-label">Servis</div>
-    <div class="s-value" id="stat-done">0</div>
-    <div class="s-sub">complétées</div>
-  </div>
-</div>
 
-<div class="filters">
-  <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
-  <button class="filter-btn" onclick="setFilter('en attente', this)">En attente</button>
-  <button class="filter-btn" onclick="setFilter('en preparation', this)">En préparation</button>
-  <button class="filter-btn" onclick="setFilter('pret', this)">Prêt</button>
-  <button class="filter-btn" onclick="setFilter('livre', this)">Servi</button>
-</div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
+    <button class="filter-btn" onclick="setFilter('en attente', this)">En attente</button>
+    <button class="filter-btn" onclick="setFilter('en preparation', this)">En préparation</button>
+    <button class="filter-btn" onclick="setFilter('pret', this)">Prêt</button>
+    <button class="filter-btn" onclick="setFilter('servi', this)">Servi</button>
+  </div>
 
-<div class="orders-container">
-  <div class="orders-grid" id="orders-grid"></div>
-</div>
+  <div class="orders-container">
+    <div class="orders-grid" id="orders-grid"></div>
+  </div>
 
-<!-- REVENUE CHART MODAL -->
-<div id="revenue-modal">
-  <div class="rev-inner">
-    <div class="rev-header">
-      <div>
-        <div class="rev-title">Chiffre d'affaires</div>
-        <div class="rev-sub">Évolution cumulée · <span id="rev-orders-count">0</span> commandes</div>
+  <!-- Modal CA -->
+  <div id="revenue-modal" class="bottom-modal">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Chiffre d'affaires</div>
+          <div class="modal-sub">Évolution cumulée · <span id="rev-orders-count">0</span> commandes</div>
+        </div>
+        <button class="modal-close" onclick="closeRevenueModal()">✕</button>
       </div>
-      <button class="rev-close" onclick="closeRevenueModal()">✕</button>
+      <div class="rev-total-row">
+        <span id="rev-total-val">0.000</span><span class="rev-dt">DT</span>
+      </div>
+      <canvas id="revenue-canvas"></canvas>
     </div>
-    <div class="rev-total-row">
-      <span id="rev-total-val">0.000</span><span class="rev-dt">DT</span>
-    </div>
-    <canvas id="revenue-canvas"></canvas>
   </div>
-</div>
+
+  <!-- Modal Utilisateurs (superadmin) -->
+  <div id="users-modal" class="bottom-modal">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Utilisateurs</div>
+          <div class="modal-sub">Gestion des comptes admin</div>
+        </div>
+        <button class="modal-close" onclick="closeUsersModal()">✕</button>
+      </div>
+
+      <div class="user-list" id="user-list">
+        <div style="text-align:center;color:var(--gold);font-size:0.85rem;padding:1rem 0;">Chargement...</div>
+      </div>
+
+      <hr class="add-user-divider" />
+      <div class="add-user-title">Ajouter un utilisateur</div>
+      <div class="add-user-grid">
+        <input type="text" id="new-username" class="u-input" placeholder="Identifiant" autocomplete="off" />
+        <input type="text" id="new-display" class="u-input" placeholder="Nom affiché" autocomplete="off" />
+        <input type="password" id="new-pwd" class="u-input" placeholder="Mot de passe (min. 6 car.)" autocomplete="new-password" />
+        <select id="new-role" class="u-select">
+          <option value="admin">Admin</option>
+          <option value="superadmin">Super Admin</option>
+        </select>
+        <button class="add-user-btn span2" onclick="createUser()">Ajouter l'utilisateur</button>
+      </div>
+      <div class="users-err" id="users-err"></div>
+    </div>
+  </div>
 
 </div><!-- /#admin-content -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script>
-  // ---- Auth Gate ----
-  // Pour ajouter/modifier des comptes : changer les paires "utilisateur": "PIN" ci-dessous
-  const STAFF_ACCOUNTS = {
-    'admin':  '1234',
-    'staff':  '5678',
-  };
-  const _SK = 'bisou_adm_s';
+  const _SK = 'bisou_adm_s2';
 
-  function _showAdmin() {
+  async function _sha256(s) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function _getSession() { try { return JSON.parse(sessionStorage.getItem(_SK)||'null'); } catch { return null; } }
+  function _setSession(u) { sessionStorage.setItem(_SK, JSON.stringify(u)); }
+  function _clearSession() { sessionStorage.removeItem(_SK); }
+
+  function _showAdmin(user) {
     document.getElementById('admin-gate').style.display = 'none';
     document.getElementById('admin-content').style.display = 'block';
+    document.getElementById('header-username').textContent = user.display_name || user.username;
+    document.getElementById('header-role').textContent = user.role === 'superadmin' ? 'Super Admin' : 'Admin';
+    if (user.role === 'superadmin') document.getElementById('users-btn').style.display = '';
     _initAdmin();
   }
 
-  function doLogin() {
-    const user = document.getElementById('login-user').value.trim().toLowerCase();
-    const pin  = document.getElementById('login-pin').value.trim();
-    const err  = document.getElementById('gate-err-login');
-    err.textContent = '';
-    if (!user || !pin) { err.textContent = 'Remplissez les deux champs'; return; }
-    if (STAFF_ACCOUNTS[user] && STAFF_ACCOUNTS[user] === pin) {
-      sessionStorage.setItem(_SK, '1');
-      _showAdmin();
+  /* ---- Gate init ---- */
+  async function initGate() {
+    const session = _getSession();
+    if (session) { _showAdmin(session); return; }
+
+    const { data, error } = await db.rpc('admin_exists');
+    document.getElementById('gate-loading').style.display = 'none';
+
+    if (error) {
+      // Fonctions pas encore créées → afficher bootstrap quand même
+      document.getElementById('gate-bootstrap').style.display = 'flex';
+      setTimeout(() => document.getElementById('bs-username').focus(), 100);
+      return;
+    }
+    if (!data) {
+      document.getElementById('gate-bootstrap').style.display = 'flex';
+      setTimeout(() => document.getElementById('bs-username').focus(), 100);
     } else {
-      err.textContent = 'Code utilisateur ou PIN incorrect';
-      document.getElementById('login-pin').value = '';
-      document.getElementById('login-pin').focus();
+      document.getElementById('gate-login').style.display = 'flex';
+      setTimeout(() => document.getElementById('login-username').focus(), 100);
     }
   }
 
-  function doLogout() {
-    sessionStorage.removeItem(_SK);
-    location.reload();
+  async function doBootstrap() {
+    const username = document.getElementById('bs-username').value.trim();
+    const display  = document.getElementById('bs-display').value.trim();
+    const p1 = document.getElementById('bs-pwd').value;
+    const p2 = document.getElementById('bs-pwd2').value;
+    const err = document.getElementById('gate-err-bs');
+    err.textContent = '';
+    if (!username)     { err.textContent = 'Identifiant requis'; return; }
+    if (p1.length < 6) { err.textContent = 'Minimum 6 caractères'; return; }
+    if (p1 !== p2)     { err.textContent = 'Les mots de passe ne correspondent pas'; return; }
+
+    const { data, error } = await db.rpc('admin_bootstrap', {
+      p_username: username, p_hash: await _sha256(p1), p_display_name: display || username
+    });
+    if (error || !data || data.error) { err.textContent = (data&&data.error)||'Erreur — avez-vous exécuté le SQL dans Supabase ?'; return; }
+    const user = { id: data.id, username: data.username, display_name: data.display_name, role: data.role };
+    _setSession(user);
+    _showAdmin(user);
   }
 
-  // Gate init
-  (function() {
-    if (sessionStorage.getItem(_SK) === '1') { _showAdmin(); return; }
-    setTimeout(() => document.getElementById('login-user')?.focus(), 100);
-  })();
+  async function doLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const pwd = document.getElementById('login-pwd').value;
+    const err = document.getElementById('gate-err-login');
+    err.textContent = '';
+    if (!username || !pwd) { err.textContent = 'Identifiant et mot de passe requis'; return; }
 
-  // ---- Admin Logic (called after auth) ----
-  const STATUSES = ['en attente', 'en preparation', 'pret', 'livre'];
-  const STATUS_LABELS = { 'en attente': 'En attente', 'en preparation': 'En préparation', 'pret': 'Prêt ✓', 'livre': 'Servi' };
-  let currentFilter = 'all';
-  let allOrders = [];
+    const { data, error } = await db.rpc('admin_login', { p_username: username, p_hash: await _sha256(pwd) });
+    if (error || !data) {
+      err.textContent = 'Identifiant ou mot de passe incorrect';
+      document.getElementById('login-pwd').value = '';
+      document.getElementById('login-pwd').focus();
+      return;
+    }
+    const user = { id: data.id, username: data.username, display_name: data.display_name, role: data.role };
+    _setSession(user);
+    _showAdmin(user);
+  }
+
+  function doLogout() { _clearSession(); location.reload(); }
+
+  /* ---- Admin logic ---- */
+  const STATUSES = ['en attente','en preparation','pret','servi'];
+  const STATUS_LABELS = { 'en attente':'En attente','en preparation':'En préparation','pret':'Prêt ✓','servi':'Servi' };
+  let currentFilter = 'all', allOrders = [];
 
   function _initAdmin() {
     fetchOrders();
     db.channel('orders-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+      .on('postgres_changes', { event:'*', schema:'public', table:'orders' }, () => fetchOrders())
       .subscribe();
     document.getElementById('revenue-modal').addEventListener('click', e => {
-      if (e.target === document.getElementById('revenue-modal') && Date.now() - _revOpenedAt > 400)
-        closeRevenueModal();
+      if (e.target===document.getElementById('revenue-modal') && Date.now()-_revAt>400) closeRevenueModal();
+    });
+    document.getElementById('users-modal').addEventListener('click', e => {
+      if (e.target===document.getElementById('users-modal') && Date.now()-_usersAt>400) closeUsersModal();
     });
   }
 
   async function fetchOrders() {
-    const { data, error } = await db.from('orders').select('*').order('verified', { ascending: false }).order('id', { ascending: false });
+    const { data, error } = await db.from('orders').select('*').order('verified',{ascending:false}).order('id',{ascending:false});
     if (!error) allOrders = data || [];
     renderOrders();
   }
@@ -392,12 +518,12 @@
     renderOrders();
   }
 
-  async function nextStatus(orderId) {
-    const o = allOrders.find(o => o.id === orderId);
+  async function nextStatus(id) {
+    const o = allOrders.find(o => o.id === id);
     if (!o) return;
     const idx = STATUSES.indexOf(o.status);
-    if (idx >= STATUSES.length - 1) return;
-    await db.from('orders').update({ status: STATUSES[idx + 1] }).eq('id', orderId);
+    if (idx >= STATUSES.length-1) return;
+    await db.from('orders').update({ status: STATUSES[idx+1] }).eq('id', id);
     fetchOrders();
   }
 
@@ -409,132 +535,165 @@
 
   function renderOrders() {
     const orders = allOrders;
-    const filtered = currentFilter === 'all' ? orders : orders.filter(o => o.status === currentFilter);
-
+    const filtered = currentFilter==='all' ? orders : orders.filter(o => o.status===currentFilter);
     document.getElementById('stat-total').textContent = orders.length;
-    document.getElementById('stat-waiting').textContent = orders.filter(o => o.status === 'en attente').length;
-    document.getElementById('stat-revenue').textContent = orders.reduce((s, o) => s + parseFloat(o.total), 0).toFixed(3);
-    document.getElementById('stat-done').textContent = orders.filter(o => o.status === 'livre').length;
-    document.getElementById('order-count-badge').textContent = orders.length + (orders.length === 1 ? ' commande' : ' commandes');
-
+    document.getElementById('stat-waiting').textContent = orders.filter(o=>o.status==='en attente').length;
+    document.getElementById('stat-revenue').textContent = orders.reduce((s,o)=>s+parseFloat(o.total),0).toFixed(3);
+    document.getElementById('stat-done').textContent = orders.filter(o=>o.status==='servi').length;
+    document.getElementById('order-count-badge').textContent = orders.length+(orders.length===1?' commande':' commandes');
     const grid = document.getElementById('orders-grid');
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div class="empty-state"><div class="e-icon">☕</div><p>Aucune commande${currentFilter !== 'all' ? ' dans cette catégorie' : ' pour le moment'}</p></div>`;
+    if (filtered.length===0) {
+      grid.innerHTML = `<div class="empty-state"><div class="e-icon">☕</div><p>Aucune commande${currentFilter!=='all'?' dans cette catégorie':' pour le moment'}</p></div>`;
       return;
     }
-
-    grid.innerHTML = filtered.map(o => {
-      const statusClass = o.status.replace(/ /g, '-');
-      return `
-        <div class="order-card${o.status === 'livre' ? ' done' : ''}${o.verified ? ' priority' : ''}">
-          <div class="order-card-header">
-            <div>
-              <div class="order-ref">${o.ref}</div>
-              <div class="order-time">${o.date} · ${o.time}</div>
-              <span class="verify-badge ${o.verified ? 'verified' : 'unverified'}">
-                <span class="verify-dot"></span>${o.verified ? 'Vérifié' : 'Non vérifié'}
-              </span>
-            </div>
-            <button class="status-pill ${statusClass}" onclick="nextStatus(${o.id})" title="Cliquer pour avancer le statut">
-              ${STATUS_LABELS[o.status]}
-            </button>
+    grid.innerHTML = filtered.map(o => `
+      <div class="order-card${o.status==='servi'?' done':''}${o.verified?' priority':''}">
+        <div class="order-card-header">
+          <div>
+            <div class="order-ref">${o.ref}</div>
+            <div class="order-time">${o.date} · ${o.time}</div>
+            <span class="verify-badge ${o.verified?'verified':'unverified'}">
+              <span class="verify-dot"></span>${o.verified?'Vérifié':'Non vérifié'}
+            </span>
           </div>
-          <div class="order-items">
-            ${o.items.map(i => `
-              <div class="order-item-row">
-                <span class="order-item-name">${i.name}</span>
-                <span class="order-item-qty">× ${i.qty}</span>
-              </div>`).join('')}
-          </div>
-          <div class="order-card-footer">
-            <div>
-              <div class="order-total-label">Total</div>
-              <div class="order-total">${o.total} DT</div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+          <button class="status-pill ${o.status.replace(/ /g,'-')}" onclick="nextStatus(${o.id})" title="Avancer le statut">
+            ${STATUS_LABELS[o.status]}
+          </button>
+        </div>
+        <div class="order-items">
+          ${o.items.map(i=>`<div class="order-item-row"><span class="order-item-name">${i.name}</span><span class="order-item-qty">× ${i.qty}</span></div>`).join('')}
+        </div>
+        <div class="order-card-footer">
+          <div><div class="order-total-label">Total</div><div class="order-total">${o.total} DT</div></div>
+        </div>
+      </div>`).join('');
   }
 
-  // ---- Revenue chart modal ----
-  let _revOpenedAt = 0;
+  /* ---- Revenue modal ---- */
+  let _revAt = 0;
 
   function openRevenueModal() {
-    _revOpenedAt = Date.now();
-    const total = allOrders.reduce((s, o) => s + parseFloat(o.total || 0), 0);
+    _revAt = Date.now();
+    const total = allOrders.reduce((s,o)=>s+parseFloat(o.total||0),0);
     document.getElementById('rev-total-val').textContent = total.toFixed(3);
     document.getElementById('rev-orders-count').textContent = allOrders.length;
     document.getElementById('revenue-modal').classList.add('open');
     setTimeout(drawRevenueChart, 60);
   }
-
-  function closeRevenueModal() {
-    document.getElementById('revenue-modal').classList.remove('open');
-  }
+  function closeRevenueModal() { document.getElementById('revenue-modal').classList.remove('open'); }
 
   function drawRevenueChart() {
     const canvas = document.getElementById('revenue-canvas');
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const W = canvas.parentElement.clientWidth;
-    const H = 190;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    canvas.style.height = H + 'px';
-    const ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-
-    const RED = '#8B1A1A', GOLD = '#c9956a', GRID = '#f0e4d0', AXIS = '#e2c9a8';
-    const pL = 52, pR = 16, pT = 16, pB = 38;
-    const cW = W - pL - pR, cH = H - pT - pB;
-
-    const sorted = [...allOrders].sort((a, b) => {
-      const ts = o => { const [d,m,y]=(o.date||'01/01/2024').split('/'); const [hh,mm]=(o.time||'00:00').split(':'); return new Date(+y,+m-1,+d,+hh,+mm).getTime(); };
-      return ts(a) - ts(b);
+    const dpr = Math.min(window.devicePixelRatio||1,2);
+    const W = canvas.parentElement.clientWidth, H = 190;
+    canvas.width = W*dpr; canvas.height = H*dpr; canvas.style.height = H+'px';
+    const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
+    const RED='#8B1A1A',GOLD='#c9956a',GRID='#f0e4d0',AXIS='#e2c9a8';
+    const pL=52,pR=16,pT=16,pB=38,cW=W-pL-pR,cH=H-pT-pB;
+    const sorted = [...allOrders].sort((a,b)=>{
+      const ts=o=>{const[d,m,y]=(o.date||'01/01/2024').split('/');const[hh,mm]=(o.time||'00:00').split(':');return new Date(+y,+m-1,+d,+hh,+mm).getTime();};
+      return ts(a)-ts(b);
     });
-
-    ctx.clearRect(0, 0, W, H);
-    if (sorted.length === 0) {
-      ctx.font = '13px Inter, sans-serif'; ctx.fillStyle = GOLD; ctx.textAlign = 'center';
-      ctx.fillText('Aucune commande pour le moment', W/2, H/2); return;
+    ctx.clearRect(0,0,W,H);
+    if (!sorted.length) {
+      ctx.font='13px Inter,sans-serif';ctx.fillStyle=GOLD;ctx.textAlign='center';
+      ctx.fillText('Aucune commande',W/2,H/2);return;
     }
-
-    let cum = 0;
-    const pts = sorted.map((o, i) => { cum += parseFloat(o.total||0); return { i, y: cum, label: o.time||'' }; });
-    const maxY = pts[pts.length-1].y || 1, n = pts.length;
-    const px = i => pL + (n===1 ? cW/2 : (i/(n-1))*cW);
-    const py = v => pT + cH - (v/maxY)*cH;
-
-    for (let t = 0; t <= 4; t++) {
-      const v = (maxY/4)*t, y = py(v);
-      ctx.strokeStyle = GRID; ctx.lineWidth = 0.8;
-      ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(W-pR,y); ctx.stroke();
-      ctx.font = '9px Inter, sans-serif'; ctx.fillStyle = GOLD; ctx.textAlign = 'right';
-      ctx.fillText(v.toFixed(0), pL-5, y+3.5);
+    let cum=0;
+    const pts=sorted.map((o,i)=>{cum+=parseFloat(o.total||0);return{i,y:cum,label:o.time||''};});
+    const maxY=pts[pts.length-1].y||1,n=pts.length;
+    const px=i=>pL+(n===1?cW/2:(i/(n-1))*cW);
+    const py=v=>pT+cH-(v/maxY)*cH;
+    for(let t=0;t<=4;t++){
+      const v=(maxY/4)*t,y=py(v);
+      ctx.strokeStyle=GRID;ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
+      ctx.font='9px Inter,sans-serif';ctx.fillStyle=GOLD;ctx.textAlign='right';ctx.fillText(v.toFixed(0),pL-5,y+3.5);
     }
-    ctx.strokeStyle = AXIS; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+cH); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(pL,pT+cH); ctx.lineTo(W-pR,pT+cH); ctx.stroke();
-
-    const grad = ctx.createLinearGradient(0,pT,0,pT+cH);
-    grad.addColorStop(0,'rgba(139,26,26,0.2)'); grad.addColorStop(1,'rgba(139,26,26,0.01)');
-    ctx.beginPath();
-    pts.forEach((p,i) => i===0 ? ctx.moveTo(px(i),py(p.y)) : ctx.lineTo(px(i),py(p.y)));
-    ctx.lineTo(px(n-1),pT+cH); ctx.lineTo(px(0),pT+cH); ctx.closePath();
-    ctx.fillStyle = grad; ctx.fill();
-
-    ctx.beginPath();
-    pts.forEach((p,i) => i===0 ? ctx.moveTo(px(i),py(p.y)) : ctx.lineTo(px(i),py(p.y)));
-    ctx.strokeStyle = RED; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
-
-    pts.forEach((p,i) => {
-      ctx.beginPath(); ctx.arc(px(i),py(p.y),4,0,Math.PI*2);
-      ctx.fillStyle='#fff'; ctx.fill();
-      ctx.strokeStyle=RED; ctx.lineWidth=2; ctx.stroke();
+    ctx.strokeStyle=AXIS;ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+cH);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pL,pT+cH);ctx.lineTo(W-pR,pT+cH);ctx.stroke();
+    const grad=ctx.createLinearGradient(0,pT,0,pT+cH);
+    grad.addColorStop(0,'rgba(139,26,26,0.2)');grad.addColorStop(1,'rgba(139,26,26,0.01)');
+    ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(px(i),py(p.y)):ctx.lineTo(px(i),py(p.y)));
+    ctx.lineTo(px(n-1),pT+cH);ctx.lineTo(px(0),pT+cH);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+    ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(px(i),py(p.y)):ctx.lineTo(px(i),py(p.y)));
+    ctx.strokeStyle=RED;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+    pts.forEach(p=>{
+      ctx.beginPath();ctx.arc(px(p.i),py(p.y),4,0,Math.PI*2);
+      ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=RED;ctx.lineWidth=2;ctx.stroke();
     });
-
-    const step = Math.max(1, Math.ceil(n/6));
-    ctx.font = '9px Inter, sans-serif'; ctx.fillStyle = GOLD; ctx.textAlign = 'center';
-    pts.forEach((p,i) => { if (i%step===0||i===n-1) ctx.fillText(p.label, px(i), pT+cH+20); });
+    const step=Math.max(1,Math.ceil(n/6));
+    ctx.font='9px Inter,sans-serif';ctx.fillStyle=GOLD;ctx.textAlign='center';
+    pts.forEach((p,i)=>{if(i%step===0||i===n-1)ctx.fillText(p.label,px(i),pT+cH+20);});
   }
+
+  /* ---- Users modal ---- */
+  let _usersAt = 0;
+
+  async function openUsersModal() {
+    _usersAt = Date.now();
+    document.getElementById('users-modal').classList.add('open');
+    await loadUsers();
+  }
+  function closeUsersModal() {
+    document.getElementById('users-modal').classList.remove('open');
+    document.getElementById('users-err').textContent = '';
+  }
+
+  async function loadUsers() {
+    const session = _getSession();
+    const { data, error } = await db.rpc('admin_list_users', { p_requester_id: session.id });
+    const list = document.getElementById('user-list');
+    if (error || !data) { list.innerHTML='<div style="color:var(--red);font-size:0.82rem;text-align:center;">Erreur de chargement</div>'; return; }
+    const users = Array.isArray(data) ? data : [];
+    if (!users.length) { list.innerHTML='<div style="color:var(--gold);font-size:0.82rem;text-align:center;padding:1rem 0;">Aucun utilisateur</div>'; return; }
+    list.innerHTML = users.map(u => `
+      <div class="user-row">
+        <div class="user-row-info">
+          <div class="user-row-name">${u.display_name||u.username}</div>
+          <div class="user-row-id">@${u.username} · ${u.created_at?new Date(u.created_at).toLocaleDateString('fr-FR'):''}</div>
+        </div>
+        <div class="user-row-right">
+          <span class="role-pill">${u.role==='superadmin'?'Super Admin':'Admin'}</span>
+          ${u.id!==session.id
+            ? `<button class="user-del-btn" onclick="deleteUser('${u.id}')">Retirer</button>`
+            : `<span style="font-size:0.7rem;color:var(--gold);">(vous)</span>`}
+        </div>
+      </div>`).join('');
+  }
+
+  async function createUser() {
+    const session = _getSession();
+    const username = document.getElementById('new-username').value.trim();
+    const display  = document.getElementById('new-display').value.trim();
+    const pwd  = document.getElementById('new-pwd').value;
+    const role = document.getElementById('new-role').value;
+    const err  = document.getElementById('users-err');
+    err.textContent = '';
+    if (!username)     { err.textContent='Identifiant requis'; return; }
+    if (pwd.length<6)  { err.textContent='Mot de passe : minimum 6 caractères'; return; }
+
+    const { data, error } = await db.rpc('admin_create_user', {
+      p_username: username, p_hash: await _sha256(pwd),
+      p_display_name: display||username, p_role: role,
+      p_requester_id: session.id
+    });
+    if (error||(data&&data.error)) { err.textContent=(data&&data.error)||(error&&error.message)||'Erreur'; return; }
+    ['new-username','new-display','new-pwd'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('new-role').value='admin';
+    await loadUsers();
+  }
+
+  async function deleteUser(userId) {
+    if (!confirm('Retirer cet utilisateur ?')) return;
+    const session = _getSession();
+    const { data, error } = await db.rpc('admin_delete_user', { p_target_id: userId, p_requester_id: session.id });
+    if (error||(data&&data.error)) { document.getElementById('users-err').textContent=(data&&data.error)||'Erreur'; return; }
+    await loadUsers();
+  }
+
+  /* ---- Start ---- */
+  initGate();
 </script>
 </body>
 </html>
