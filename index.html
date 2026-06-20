@@ -534,7 +534,9 @@
       <div class="order-confirm-icon">✓</div>
     </div>
     <div class="order-tracking" id="order-tracking">
+      <div class="tracking-icon" id="tracking-icon">⏳</div>
       <div class="tracking-ref" id="tracking-ref"></div>
+      <div class="tracking-status-label" id="tracking-status-label">En attente</div>
       <div class="tracking-steps">
         <div class="tracking-step" data-status="en attente">
           <div class="step-dot"></div>
@@ -546,13 +548,14 @@
         </div>
         <div class="tracking-step" data-status="pret">
           <div class="step-dot"></div>
-          <span>Prêt ✓</span>
+          <span>Prêt !</span>
         </div>
-        <div class="tracking-step" data-status="livre">
+        <div class="tracking-step" data-status="servi">
           <div class="step-dot"></div>
           <span>Servi</span>
         </div>
       </div>
+      <div class="tracking-msg" id="tracking-msg">Votre commande a été reçue !</div>
       <button class="tracking-close-btn" onclick="closeCheckout()">Fermer</button>
     </div>
   </div>

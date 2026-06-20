@@ -177,13 +177,13 @@ function saveOrder(order) {
 function submitWithoutScan() {
   const order = buildOrder(false);
   saveOrder(order).then(() => {
+    cart.length = 0;
+    renderCart();
     document.getElementById('checkout-panel').querySelector('.checkout-inner').style.display = 'none';
-    document.getElementById('order-confirm').classList.add('show');
-    setTimeout(() => {
-      cart.length = 0;
-      renderCart();
-      closeCheckout();
-    }, 3000);
+    document.getElementById('tracking-ref').textContent = order.ref;
+    updateTrackingUI('en attente');
+    document.getElementById('order-tracking').classList.add('show');
+    startOrderTracking(order.ref);
   });
 }
 
@@ -208,12 +208,26 @@ function startOrderTracking(ref) {
     .subscribe();
 }
 
+const TRACK_INFO = {
+  'en attente':     { icon: '⏳', label: 'En attente',       msg: 'Votre commande a été reçue !' },
+  'en preparation': { icon: '👨‍🍳', label: 'En préparation',  msg: 'En cours de préparation...' },
+  'pret':           { icon: '✅', label: 'Prêt !',            msg: 'Votre commande est prête !' },
+  'servi':          { icon: '🎉', label: 'Servi',             msg: 'Bonne dégustation !' }
+};
+
 function updateTrackingUI(status) {
-  const steps = ['en attente', 'en preparation', 'pret', 'livre'];
+  const steps = ['en attente', 'en preparation', 'pret', 'servi'];
   const idx = steps.indexOf(status);
   document.querySelectorAll('#order-tracking .tracking-step').forEach((step, i) => {
     step.classList.toggle('active', i <= idx);
   });
+  const info = TRACK_INFO[status] || TRACK_INFO['en attente'];
+  const iconEl = document.getElementById('tracking-icon');
+  const labelEl = document.getElementById('tracking-status-label');
+  const msgEl = document.getElementById('tracking-msg');
+  if (iconEl) iconEl.textContent = info.icon;
+  if (labelEl) labelEl.textContent = info.label;
+  if (msgEl) msgEl.textContent = info.msg;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -779,6 +779,22 @@ footer p { font-size: 0.75rem; color: rgba(245,237,224,0.4); letter-spacing: 1px
   min-height: 320px;
 }
 .order-tracking.show { display: flex; }
+.tracking-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+.tracking-status-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--red);
+  margin-top: -1rem;
+}
+.tracking-msg {
+  font-size: 0.78rem;
+  color: var(--brown-light);
+  margin-top: -1.2rem;
+  text-align: center;
+}
 .tracking-ref {
   font-size: 0.72rem;
   letter-spacing: 2px;
