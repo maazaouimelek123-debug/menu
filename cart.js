@@ -230,7 +230,36 @@ function updateTrackingUI(status) {
   if (msgEl) msgEl.textContent = info.msg;
 }
 
+async function loadFeaturedProducts() {
+  const grid = document.getElementById('popular-grid');
+  if (!grid) return;
+  const { data, error } = await db
+    .from('products')
+    .select('*')
+    .eq('featured', true)
+    .eq('visible', true)
+    .order('sort_order')
+    .limit(5);
+  if (error || !data || !data.length) {
+    grid.innerHTML = '';
+    return;
+  }
+  grid.innerHTML = data.map(p => `
+    <div class="popular-card" onclick="addFromPopular(this,'${p.name.replace(/'/g,"\\'")}',${p.price})">
+      ${p.photo
+        ? `<img class="popular-img" src="${p.photo}" alt="${p.name}" loading="lazy">`
+        : `<div class="popular-img popular-img-ph"><span>${p.category.charAt(0)}</span></div>`}
+      <div class="popular-body">
+        <div class="popular-cat">${p.category}</div>
+        <div class="popular-name">${p.name}</div>
+        <div class="popular-price">${parseFloat(p.price).toFixed(3)} DT</div>
+        <div class="popular-add">+ Ajouter</div>
+      </div>
+    </div>`).join('');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  loadFeaturedProducts();
   // Nespresso toggles (origine / arôme) — radio select per group, click again to deselect
   document.querySelectorAll('.nesp-toggle').forEach(toggle => {
     toggle.addEventListener('click', (e) => {

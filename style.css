@@ -255,6 +255,28 @@ nav {
   object-fit: cover;
   display: block;
 }
+.popular-img-ph {
+  width: 100%;
+  height: 130px;
+  background: linear-gradient(135deg, var(--beige-dark), var(--cream));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.popular-img-ph span {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: var(--red);
+  opacity: 0.4;
+}
+.popular-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--gold);
+  font-size: 0.85rem;
+  padding: 2rem 0;
+  letter-spacing: 1px;
+}
 .popular-body {
   padding: 1rem 1rem 1.2rem;
 }
