@@ -587,14 +587,20 @@
     renderOrders();
   }
 
+  function _esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   async function setStatus(id, status) {
-    await db.from('orders').update({ status }).eq('id', id);
+    const session = _getSession();
+    await db.rpc('admin_set_order_status', { p_token: session.token, p_order_id: id, p_status: status });
     fetchOrders();
   }
 
   async function clearAll() {
     if (!confirm('Effacer toutes les commandes ?')) return;
-    await db.from('orders').delete().neq('id', 0);
+    const session = _getSession();
+    await db.rpc('admin_clear_orders', { p_token: session.token });
     fetchOrders();
   }
 
@@ -615,8 +621,8 @@
       <div class="order-card${o.status==='servi'?' done':''}${o.verified?' priority':''}">
         <div class="order-card-header">
           <div>
-            <div class="order-ref">${o.ref}</div>
-            <div class="order-time">${o.date} · ${o.time}</div>
+            <div class="order-ref">${_esc(o.ref)}</div>
+            <div class="order-time">${_esc(o.date)} · ${_esc(o.time)}</div>
             <span class="verify-badge ${o.verified?'verified':'unverified'}">
               <span class="verify-dot"></span>${o.verified?'Vérifié':'Non vérifié'}
             </span>
@@ -626,13 +632,13 @@
           </span>
         </div>
         <div class="order-items">
-          ${o.items.map(i=>`<div class="order-item-row"><span class="order-item-name">${i.name}</span><span class="order-item-qty">× ${i.qty}</span></div>`).join('')}
+          ${o.items.map(i=>`<div class="order-item-row"><span class="order-item-name">${_esc(i.name)}</span><span class="order-item-qty">× ${_esc(i.qty)}</span></div>`).join('')}
         </div>
         <div class="phase-actions">
           ${STATUSES.map(s=>`<button class="phase-btn ${s.replace(/ /g,'-')}${o.status===s?' active':''}" onclick="setStatus(${o.id},'${s}')">${STATUS_LABELS[s].replace(' ✓','')}</button>`).join('')}
         </div>
         <div class="order-card-footer">
-          <div><div class="order-total-label">Total</div><div class="order-total">${o.total} DT</div></div>
+          <div><div class="order-total-label">Total</div><div class="order-total">${_esc(o.total)} DT</div></div>
         </div>
       </div>`).join('');
   }
@@ -751,13 +757,13 @@
     list.innerHTML = users.map(u => `
       <div class="user-row">
         <div class="user-row-info">
-          <div class="user-row-name">${u.display_name||u.username}</div>
-          <div class="user-row-id">@${u.username} · ${u.created_at?new Date(u.created_at).toLocaleDateString('fr-FR'):''}</div>
+          <div class="user-row-name">${_esc(u.display_name||u.username)}</div>
+          <div class="user-row-id">@${_esc(u.username)} · ${u.created_at?new Date(u.created_at).toLocaleDateString('fr-FR'):''}</div>
         </div>
         <div class="user-row-right">
           <span class="role-pill">${u.role==='superadmin'?'Super Admin':'Admin'}</span>
           ${u.id!==session.id
-            ? `<button class="user-del-btn" onclick="deleteUser('${u.id}')">Retirer</button>`
+            ? `<button class="user-del-btn" onclick="deleteUser('${_esc(u.id)}')">Retirer</button>`
             : `<span style="font-size:0.7rem;color:var(--gold);">(vous)</span>`}
         </div>
       </div>`).join('');
@@ -817,11 +823,11 @@
     const cats = ['all', ...new Set(_allProducts.map(p => p.category).filter(Boolean))];
     const filter = document.getElementById('prod-cat-filter');
     filter.innerHTML = cats.map(c =>
-      `<button class="prod-cat-btn${c===_prodCat?' active':''}" onclick="_setProdCat('${c}')">${c==='all'?'Tous':c}</button>`
+      `<button class="prod-cat-btn${c===_prodCat?' active':''}" onclick="_setProdCat('${_esc(c)}')">${c==='all'?'Tous':_esc(c)}</button>`
     ).join('');
     const sel = document.getElementById('new-prod-cat');
     const existing = sel.value;
-    sel.innerHTML = cats.filter(c=>c!=='all').map(c=>`<option value="${c}">${c}</option>`).join('') +
+    sel.innerHTML = cats.filter(c=>c!=='all').map(c=>`<option value="${_esc(c)}">${_esc(c)}</option>`).join('') +
       `<option value="__new__">+ Nouvelle catégorie…</option>`;
     if (existing && [...sel.options].some(o=>o.value===existing)) sel.value = existing;
   }
@@ -842,10 +848,10 @@
       return;
     }
     list.innerHTML = items.map(p => `
-      <div class="prod-item${p.visible===false?' prod-hidden':''}" id="prod-item-${p.id}">
+      <div class="prod-item${p.visible===false?' prod-hidden':''}" id="prod-item-${_esc(p.id)}">
         <div class="prod-item-info">
-          <div class="prod-item-name">${p.name}</div>
-          <div class="prod-item-cat">${p.category||''}</div>
+          <div class="prod-item-name">${_esc(p.name)}</div>
+          <div class="prod-item-cat">${_esc(p.category||'')}</div>
         </div>
         <input class="prod-price-input" type="number" step="0.001" min="0"
           value="${parseFloat(p.price||0).toFixed(3)}"
